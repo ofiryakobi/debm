@@ -126,7 +126,7 @@ Fitting
 ----
 
 If we want to estimate the parameters of the model, we need real human data observations.  
-Download the following example [https://github.com/ofiryakobi/debm/blob/master/docs/ex1.csv](https://github.com/ofiryakobi/debm/blob/master/docs/ex1.csv) to your computer.  
+Download the following example [https://github.com/ofiryakobi/debm/blob/master/help/ex1.csv](https://github.com/ofiryakobi/debm/blob/master/help/ex1.csv) to your computer.  
 Make sure you know the path of the file you downloaded (e.g., c:\users\myName\downloads\).  
 
 Add the following line of code to your script, and change the path to the real file path:  
@@ -202,9 +202,9 @@ We can also fit Kappa for each individual, using the same mechanism. However, an
 (note: I plan to add a built-in functionality for individual differences estimation in future release)  
 
 Download the data of three subjects:  
-[Subject 1](https://github.com/ofiryakobi/debm/blob/master/docs/sub1.csv)  
-[Subject 2](https://github.com/ofiryakobi/debm/blob/master/docs/sub2.csv)  
-[Subject 3](https://github.com/ofiryakobi/debm/blob/master/docs/sub3.csv)  
+[Subject 1](https://github.com/ofiryakobi/debm/blob/master/help/sub1.csv)  
+[Subject 2](https://github.com/ofiryakobi/debm/blob/master/help/sub2.csv)  
+[Subject 3](https://github.com/ofiryakobi/debm/blob/master/help/sub3.csv)  
 
 To make the estimation faster (for demonstration only), we will limit the values of Kappa to 1-10.  
 
@@ -358,6 +358,17 @@ You should see in *res_fit_2tasks* that the best Alpha is indeed 0.65.
 
 Importing data from a csv file using Pandas
 ----
+If you are not familiar with Python/Pandas, this section could be helpful.  
+Pandas, like NumPy, is a very popular and useful package.  
+It allows working efficiently with dataframes.  
+
+To import Pandas:  
+```
+import pandas as pd
+```
+
+
+
 Creating dependent (or correlated) prospects
 ----
 

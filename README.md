@@ -1,6 +1,6 @@
 # A Python package for Decision from Experience Behavior Modeling (DEBM)
 
-DEBM is a **playground** for modeling behavior in the decision from experience paradigm, developed by Ofir Yakobi. 
+DEBM is a **playground** for modeling behavior in the decision from experience paradigm, developed by Dr. Ofir Yakobi. 
 
 The rational behind DEBM is to  
 ----
@@ -65,11 +65,14 @@ from debm import Prospect, Sample_of_K, resPlot, FitMultiGame, makeGrid, saveEst
 import numpy as np #We will use NumPy as well, with its short alias np
 ```
 
-We will start by defining the two prospects simulating 100 trials decision-making problem.  
-The first is the status quo, and we will name it accordingly:
+We will start by defining the two prospects simulating 100 trials decision-making problem described in Erev and Roth (2014).  
+This problem is a choice between two prospects: a status quo which gives 0 (zero) all the time, and a risky prospect  
+that gives 1 most of the time (90%) or -10.  
+
+We will define the status quo, and name it accordingly:
 `StatQuo=Prospect(100,[0]*100,False)`
 This line of code creates a Prospect named StatusQuo, with 100 trials (the 1st argument).  
-The 2nd argument is an array of 100 zeros (instead of writing [0,0,0,0,0....,0]) - these are the outcomes.  
+The 2nd argument is an array of 100 zeros (instead of writing [0,0,0,0,0....,0]) - this is the outcomes array.  
 The 3rd argument passed to Prospect is boolean (True/False), and it is used when we pass a function (see below).  
   
 Now we will define a prospect that produce -10 (minus 10) 10% of the time, and +1 (a gain of one point) 90% of the time.  
@@ -97,7 +100,7 @@ Parameters is a dictionary of parameters. In this specific model we only have Ka
 [StatQuo,B1] - a list of the two prospects we defined.  
 1000 - the number of simulations to run each time we generate predictions.  
 
-That's it! we set up a model, and your code should look like that at this point:  
+That's it! We set up a model, and your code should look like the following at this point:  
 ```
 from debm import Prospect, Sample_of_K, resPlot, FitMultiGame, makeGrid, saveEstimation ,resPlot
 import numpy as np #We will use NumPy as well, with its short alias np
@@ -107,9 +110,9 @@ B1=Prospect(100,np.random.choice,False,[-10,1],100,True,[0.1,0.9])
 sok1=Sample_of_K({'Kappa':5},[StatQuo,B1],1000)
 ```
 
-Now let's make predictions, and save them to a new variable called choices1:  
+Now let's make predictions, and save them to a new variable called *choices1*:  
 `choices1=sok1.Predict()`  
-choices1 stores the choice rates predicted for each prospect for the 100 trials we defined, based on 1000 simulations.  
+*choices1* stores the choice rates predicted for each prospect for the 100 trials we defined, based on 1000 simulations.  
 You can `print(choices1)` to inspect the results.  
 To see the mean over all trials, type `choices1.mean(axis=0)` (axis=0 states that we want the mean over rows [trials] and not the grand mean).  
 The results should be approximately 38% and 62% as in Erev and Roth.  
@@ -367,14 +370,52 @@ import pandas as pd
 ```
 
 You can import csv or excel files from your local machine, or from a URL. Let's import data from Yakobi et al. (2020), experiment 1.  
-```
-```
+In this experiment, each one of the 85 participants completed 3 decision tasks.  
 
+```
+#Read the csv file directly from the web
+df=pd.read_csv('https://github.com/ofiryakobi/debm/raw/main/help/TAXING_RECKLESS_BEHAVIORS_data.csv')
 
+#In he column named "player.condition", replace the values noR, overR and modR,
+#with 0, 0.4 and 0.8, respectively. This is just for convenience.
+df['player.condition'].replace({'noR':0,'overR':0.8,'modR':0.4},inplace=True)
+
+#The experiment included 3 games with 100 trials each, but the numbering of trials
+#is 1-300. Make the trials 1-100 for each task, save the results in a column named
+#trial.
+df['trial']=df['subsession.round_number']-100*((df['subsession.round_number']-1)//100)
+
+#Aggregate the dataframe over condition and trial and save it in a new dataframe
+#named df_agg. Take the mean of the relevant columns only:safe_choice, 
+#medRisk_choice, and highRisk_choice.
+df_agg=df.groupby(['player.condition','trial'])[['safe_choice','medRisk_choice','highRisk_choice']].mean()
+
+#Convert and store each of the three tasks (0,0.4,0.8) into an array.
+obs_0=df_agg.loc[0.0].to_numpy()
+obs_04=df_agg.loc[0.4].to_numpy()
+obs_08=df_agg.loc[0.8].to_numpy()
+```  
+
+That's it! We now have three arrays, each containing the mean choice rates  
+for 85 participants in each of the 100 trials. We can now use them as observations  
+to fit models.  
+
+Below (section "Creating dependent (or correlated) prospects"), you will learn how to  
+create correlated prospects (which is needed to the Yakobi et al. study), and then we will  
+continue to fit a model on these data.    
 
 
 Creating dependent (or correlated) prospects
 ----
+
+In some cases, we will want to have our prospects correlated.  
+Let's look at an example of three prospects:  
+A- 10, p=0.9; -100 otherwise  
+B- 8, p=0.8; -80 otherwise  
+C- 8 if B equals 8; otherwise, draw a random number from a uniform distribution between -180 and 20.  
+
+As you noted, the outcomes of C is dependent on the outcomes of B.  
+In order to implement this design, we need to use some
 
 Creating dynamic prospects
 ----

@@ -361,11 +361,15 @@ Importing data from a csv file using Pandas
 If you are not familiar with Python/Pandas, this section could be helpful.  
 Pandas, like NumPy, is a very popular and useful package.  
 It allows working efficiently with dataframes.  
-
 To import Pandas:  
 ```
 import pandas as pd
 ```
+
+You can import csv or excel files from your local machine, or from a URL. Let's import data from Yakobi et al. (2020), experiment 1.  
+```
+```
+
 
 
 

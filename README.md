@@ -72,7 +72,8 @@ that gives 1 most of the time (90%) or -10.
 We will define the status quo, and name it accordingly:
 `StatQuo=Prospect(100,[0]*100,False)`
 This line of code creates a Prospect named StatusQuo, with 100 trials (the 1st argument).  
-The 2nd argument is an array of 100 zeros (instead of writing [0,0,0,0,0....,0]) - this is the outcomes array.  
+The 2nd argument is an array of 100 zeros (instead of writing [0,0,0,0,0....,0]) - this is the outcomes array,  
+stating that the outcome is zero in every trial.    
 The 3rd argument passed to Prospect is boolean (True/False), and it is used when we pass a function (see below).  
   
 Now we will define a prospect that produce -10 (minus 10) 10% of the time, and +1 (a gain of one point) 90% of the time.  
@@ -85,8 +86,15 @@ np.random.choice([1,-10],1,True,[0.9,0.1])
 The result would be one number, either 1 (in probability 0.9) or -10.  
 If we want to output 100 numbers instead of one: np.random.choice([1,-10],1,True,[0.9,0.1]).  
   
-When creating a prospect, we can pass a function (and corresponding arguments), as follows:
-`B1=Prospect(100,np.random.choice,False,[-10,1],100,True,[0.1,0.9])`
+The formal syntax for a Prospect is `Prospect(trials, fun, oneOutcomePerRun, *args, **kwargs)`  
+trials - the number of trials the decision making problem.  
+fun - an array of outcomes (in the size of *trials*), or a function.  
+oneOutcomePerRun - boolean (True/False), stating whether the function above returns  
+one value per run, or returns *trials* outcomes (e.g., 100 outcomes) at once.  
+*args,**kwargs - optional arguments to be passed to the function.  
+
+When creating our *B1* prospect, we will pass a function (and corresponding arguments), as follows:
+`B1=Prospect(100,np.random.choice,False,[-10,1],100,True,[0.1,0.9])`  
 
 We defined a prospect named B1 with 100 trials, passed the function np.random.choice,  
 Passed False to state that the function we are passing generates all trials at once (not one by one),  
@@ -408,14 +416,15 @@ continue to fit a model on these data.
 Creating dependent (or correlated) prospects
 ----
 
-In some cases, we will want to have our prospects correlated.  
+In some cases, we will want to model environments where the prospects are correlated.  
 Let's look at an example of three prospects:  
 A- 10, p=0.9; -100 otherwise  
 B- 8, p=0.8; -80 otherwise  
 C- 8 if B equals 8; otherwise, draw a random number from a uniform distribution between -180 and 20.  
 
 As you noted, the outcomes of C is dependent on the outcomes of B.  
-In order to implement this design, we need to use some
+In order to implement this design, we can create a function that does that.  
+
 
 Creating dynamic prospects
 ----

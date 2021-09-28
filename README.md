@@ -1,12 +1,12 @@
 # A Python package for Decision from Experience Behavior Modeling (DEBM)
 
-DEBM is a **playground** for modeling behavior in decision from experience paradigm. 
+DEBM is a **playground** for modeling behavior in the decision from experience paradigm, developed by Ofir Yakobi. 
 
 The rational behind DEBM is to  
 ----
 (1) Make behavioral modeling science more replicable.  
 (2) Make modeling more accessible for people with basic programming skills.  
-(3) Be a central repository for published modeling.  
+(3) Be a central repository for published models.
 (4) Speed up the process of comparing, assessing and developing behavioral models.  
 
 
@@ -16,7 +16,7 @@ Contribute
 ====
 Add your own model
 ----
-Follow this tutorial to develop your own mode, or re-write an existing model into the DEBM package.
+Follow this tutorial to develop your own model, or re-write an existing model into the DEBM package.
 Currently, only published models, or those in the process of publishing (e.g., submitted papers), will be included in the package.
 Send your code to ofiryakobi+debm (at) gmail.com with a reference to a pre-print or the published paper describing the model.
 
@@ -28,11 +28,11 @@ Please email me at ofiryakobi+debm (at) gmail.com
 Make sure you are always up to date
 ----
 **Important** - one of the essential goals for this package is to keep coding free of errors and bugs. If code is being corrected, you will not be able to enjoy it until you update your existing package.
-To do that, make sure once in a while to update the package by going to command line, and running
+To do that, make sure once in a while to update the package by going to the command line, and running
 `pip install debm -U`
 
 
-Share and ask for helpe
+Share and ask for help
 ----
 Feel free to suggest, ask, consult, and help others in our Google group:  
 https://groups.google.com/g/debm_package
@@ -44,10 +44,10 @@ The basics
 Using an existing model (whether it was created by you, or one of the built-in models) is easy.
 
 As an example, we will use the sample-of-k model, also known as Naive Sampler (Erev & Roth, 2014).
-This model asserts that when making repeated decisions, people use a small portion of their past experience to evaluate the different prospects (i.e., a sample in the size of k).
+This model asserts that when making repeated decisions, the agents recall a small sample of past experiences of the size *k* to evaluate the different prospects.
 The sampling process is done with replacement from all previous experience.
 
-As an example, we will replicate the predictions of Erev and Roth (2014), problem 1 & 2 (Table 2).
+As an example, we will replicate the predictions of Erev and Roth (2014), problems 1 and 2 (Table 2).
 
 Installing debm
 ----
@@ -57,7 +57,7 @@ Type `pip install debm`
 
 Setting up
 ----
-Using your favorite Python IDE (I recommend installing Anaconda and using Spyder), we will now import *debm* and define the environment: the prospects and model.
+Using your favorite Python IDE (I recommend installing Anaconda and using Spyder), we will now import *debm* and define the environment: the prospects and the model.
 The hash tag symbol is used for commenting, and will be used here to clarify the code.
 
 ```# We will use Prospect and Sample_of_K for now, the rest will be used later  
@@ -65,7 +65,7 @@ from debm import Prospect, Sample_of_K, resPlot, FitMultiGame, makeGrid, saveEst
 import numpy as np #We will use NumPy as well, with its short alias np
 ```
 
-We will define the prospects first, both simulating 100 trials choice problems.  
+We will start by defining the two prospects simulating 100 trials decision-making problem.  
 The first is the status quo, and we will name it accordingly:
 `StatQuo=Prospect(100,[0]*100,False)`
 This line of code creates a Prospect named StatusQuo, with 100 trials (the 1st argument).  

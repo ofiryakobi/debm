@@ -25,7 +25,7 @@ Correct existing models
 Did you find an error in one of the models, a result that does not replicate, or simply found a more efficient way to write an existing code?
 Please email me at ofiryakobi+debm (at) gmail.com
 
-Always stay up to date
+Make sure you are always up to date
 ----
 **Important** - one of the essential goals for this package is to keep coding free of errors and bugs. If code is being corrected, you will not be able to enjoy it until you update your existing package.
 To do that, make sure once in a while to update the package by going to command line, and running
@@ -37,7 +37,7 @@ Share and ask for helpe
 Feel free to suggest, ask, consult, and help others in our Google group:  
 https://groups.google.com/g/debm_package
 
-# Tutorial for non Python programmers
+# Hands-on tutorial for non Python programmers
 
 The basics
 ====
@@ -354,12 +354,18 @@ res_fit_2tasks=fitted_over_two_Tasks.OptimizeBF(pspace, True, 'MSE', 'PW')
 ```
 Note that we used pspace (the parameters grid we defined earlier), but you may want to re-define it to test other values.  
 
+You should see in *res_fit_2tasks* that the best Alpha is indeed 0.65.  
+
+Importing data from a csv file using Pandas
+----
 Creating dependent (or correlated) prospects
 ----
 
 Creating dynamic prospects
 ----
 
+Using the reGenerate option
+----
 
 Creating your very own model
 ----

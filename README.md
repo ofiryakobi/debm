@@ -1,16 +1,17 @@
 # A Python package for Decision from Experience Behavior Modeling (DEBM)
 
-DEBM is a **playground** for modeling behavior in the decision from experience paradigm, developed by Dr. Ofir Yakobi. 
+DEBM is a **playground** for modeling behavior in the decision from experience paradigm (Barron & Erev, 2003), developed by Dr. Ofir Yakobi. 
 
 The rational behind DEBM is to  
 ----
 (1) Make behavioral modeling science more replicable.  
-(2) Make modeling more accessible for people with basic programming skills.  
-(3) Be a central repository for published models.
+(2) Make modeling accessible for people with limited programming skills.  
+(3) Be a central repository for published models.  
 (4) Speed up the process of comparing, assessing and developing behavioral models.  
+(5) Facilitate teaching and intuition of decision-making models.  
 
-
-DEBM contains the basic building blocks of behavioral models, alongside a few built-in models which serve for testing and demonstration.
+DEBM contains the basic building blocks of behavioral models, alongside built-in models from the decision-making literature.  
+The full code is available above in the present GitHub repository.  
 
 Contribute
 ====
@@ -20,21 +21,22 @@ Follow this tutorial to develop your own model, or re-write an existing model in
 Currently, only published models, or those in the process of publishing (e.g., submitted papers), will be included in the package.
 Send your code to ofiryakobi+debm (at) gmail.com with a reference to a pre-print or the published paper describing the model.
 
-Correct existing models
+Correct existing models, suggest improvements
 ----
-Did you find an error in one of the models, a result that does not replicate, or simply found a more efficient way to write an existing code?
+Did you find an error in one of the models, a result that does not replicate, or found a more efficient way to write an existing code?
 Please email me at ofiryakobi+debm (at) gmail.com
 
 Make sure you are always up to date
 ----
-**Important** - one of the essential goals for this package is to keep coding free of errors and bugs. If code is being corrected, you will not be able to enjoy it until you update your existing package.
-To do that, make sure once in a while to update the package by going to the command line, and running
+**Important** - one of the essential goals for this package is to keep coding free of errors and bugs.  
+If code is being corrected, you will not be able to enjoy it until you update your existing package.
+To do that, make sure once in a while to update the package by going to the command line, and running  
 `pip install debm -U`
 
 
 Share and ask for help
 ----
-Feel free to suggest, ask, consult, and help others in our Google group:  
+Be part of the Google group community: suggest, ask, consult, and help others:  
 https://groups.google.com/g/debm_package
 
 # Hands-on tutorial for non Python programmers
@@ -66,7 +68,7 @@ import numpy as np #We will use NumPy as well, with its short alias np
 ```
 
 We will start by defining the two prospects simulating 100 trials decision-making problem described in Erev and Roth (2014).  
-This problem is a choice between two prospects: a status quo which gives 0 (zero) all the time, and a risky prospect  
+This problem is a repeated choice between two prospects: a status quo which gives 0 (zero) all the time, and a risky prospect  
 that gives 1 most of the time (90%) or -10.  
 
 We will define the status quo, and name it accordingly:
@@ -372,6 +374,7 @@ Importing data from a csv file using Pandas
 If you are not familiar with Python/Pandas, this section could be helpful.  
 Pandas, like NumPy, is a very popular and useful package.  
 It allows working efficiently with dataframes.  
+[More resources on Pandas](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html).  
 To import Pandas:  
 ```
 import pandas as pd
@@ -409,37 +412,308 @@ for 85 participants in each of the 100 trials. We can now use them as observatio
 to fit models.  
 
 Below (section "Creating dependent (or correlated) prospects"), you will learn how to  
-create correlated prospects (which is needed to the Yakobi et al. study), and then we will  
-continue to fit a model on these data.    
+create correlated prospects (which is needed to the Yakobi et al. study).
 
 
 Creating dependent (or correlated) prospects
 ----
 
-In some cases, we will want to model environments where the prospects are correlated.  
+In some cases, we will want to model environments in which the prospects are correlated.  
 Let's look at an example of three prospects:  
 A- 10, p=0.9; -100 otherwise  
 B- 8, p=0.8; -80 otherwise  
-C- 8 if B equals 8; otherwise, draw a random number from a uniform distribution between -180 and 20.  
+C- 8 if the outcome of B is 8; otherwise, draw a random number  
+from a uniform distribution between -180 and 20.  
 
-As you noted, the outcomes of C is dependent on the outcomes of B.  
-In order to implement this design, we can create a function that does that.  
+As you noted, the outcome of C in each trial is dependent on the trial outcome of B.  
+In order to implement this design, we can take advantage of the fact that *Prospect*  
+objects accept functions as inputs.  
+We will write a Python function that accepts a Prospect, inspect its outcomes, and returns  
+another prospect accordingly.  
+Read the comments (hashtags) inside the code to better understand its mechanism.  
+
+```
+def dependentOutcomes(prospect): #def states that we define a function, called dependentOutcomes  
+#This function accepts an input which we named prospect  
+    prospect.Generate() # a Prospect object has a method called generate.  
+	# When we run that (e.g., A.Generate()), we ask the prospect to draw  
+	# a new outcomes matrix.  
+    output=prospect.outcomes.copy() #Copy the outcomes to a new variable called output
+    output[output!=8]=np.random.randint(-180, 21) #Wherever the value in output is NOT 8,  
+	# store a random draw (we used NumPy again) between -180 and 21 (exclusive).  
+    return output  # Return the output matrix
+```
+In summary, this function accepts a prospect, generates new values for this prospect,  
+copy these values to a new variable - and replace all values that are not *8* with a  
+number drawn from U[-180,20], using NumPy's np.random.randint function.  
+
+You should be able by now to define prospects A and B by yourself:  
+```
+trials=100 # In case trials is not already defined somewhere else in your code
+A=Prospect(trials,np.random.choice,False,[10,-100],trials,True,[0.9,0.1])
+B=Prospect(trials,np.random.choice,False,[8,-80],trials,True,[0.8,0.2])
+```
+
+Now for the tricky part, prospect C. Instead of using a NumPy function to generate  
+random values, we will use the *dependentOutcomes* function we wrote earlier, and pass  
+prospect *B* as its arguments.  
+```
+C=Prospect(trials,dependentOutcomes,False,B)
+```
+
+The full code for this section:  
+```
+def dependentOutcomes(prospect):
+#This function accepts an input which we named prospect  
+    prospect.Generate() 
+    output=prospect.outcomes.copy()
+    output[output!=8]=np.random.randint(-180, 21)
+    return output  
+trials=100 # In case trials is not already defined somewhere else in your code
+A=Prospect(trials,np.random.choice,False,[10,-100],trials,True,[0.9,0.1])
+B=Prospect(trials,np.random.choice,False,[8,-80],trials,True,[0.8,0.2])
+C=Prospect(trials,dependentOutcomes,False,B)
+
+```
 
 
 Creating dynamic prospects
 ----
 
+Until now we created prospects that do not change over time (trials).  
+If we want to create a dynamic prospect, we need to create a function that generates outcomes.  
+Consider the following prospect:  
+D- 10, p=0.9-x; -100 otherwise, where x=trial/200.  
+
+In other words, the probability depends on the trial such that the task becomes riskier with time  
+(the probability to lose 100 points increased).  
+Let's program it:  
+
+```
+def riskyWithTime(trials): # This function accepts trials - the number of trials
+    outcomes=np.zeros(trials) # Create outcomes - an array in the size of trials
+    for t in range(trials): # Loop over the following code trials times
+        #using t as the index (e.g., it will start with 0 and end in 99 if there are 100 trials)
+        #The line below generates 10 or -100 in probabilities the depend on the current trial
+        #using NumPy random.choice, and stores it in the corresponding place in outcomes array 
+        outcomes[t]=np.random.choice([10,-100],p=[0.9-t/200, 0.1+t/200])
+    return outcomes # That's it - return the results
+    
+D=Prospect(trials,riskyWithTime, False, trials)
+```
+
+After defining riskyWithTime, we create a prospect D, now using our own  
+function and not NumPy. We state False because our function returns a matrix with all trials at once,  
+and not just one trial at a time. Then we pass *trials* to our function (which expects this input).  
+You can use D.plot() to see how the outcomes unfold over trials or blocks.  
+
+
 Using the reGenerate option
 ----
+As you have seen earlier, Models.Predict() allows generating predictions.  
+In each simulation, the set of prospects is forced to generate new outcomes,  
+which makes sense if our outcomes are stochastic.  If we define 1000 simulations,  
+we generate 1000 sets of outcomes from each prospect, and run the prediction algorithm on each.  
+
+In some cases, we would like to simulate predictions from agents that receive the same set  
+of outcomes. In that case, we want the outcomes to stay the same for the whole set of simulations.  
+For that, we can specify Models.Predict(reGenerate=False) (or simply Models.Predict(False)).  
+If it is not specified, the default value is True (generate new outcomes in each iteration).  
+
+
 
 Creating your very own model
 ----
+Finally and most importantly, you probably have your own idea of how humans make decisions.  
+Why not formalizing your thought into a quantifiable, reproducible model?  
+
+A model is an instance of a Model object. It means that whatever your model is,  
+it inherits some basic features and methods from a parent object called *Model*.  
+For example, by default your model will have an attribute named parameters, nsim,  
+name, and more. It will have built-in functions such as OptimizeBF (that we have seen earlier).  
+It is convenient because you don't have to program all of it from scratch, and also all models  
+in *debm* share the same functions and attributes.  
+
+Let's create a simple one-parameter model that assumes the following:  
+(1) People only care about the **last** set of outcomes they experienced.  
+(2) They will choose the best outcome in probability *Gamma* (that's the free parameter, ranging 0 to 1).  
+I named this model *GreedyMyopia*
+
+We will take it line by line:  
+`from debm import Model`
+Import the prototype *Model* object from the *debm* package.  
+
+`class GreedyMyopia(Model):`  
+We define objects in python using the class statement. Here we state that GreedyMyopia  
+is a type of *Model*.  
+
+There are two functions (i.e., starting with *def*) that are mandatory:  
+__init__(self) - note the double underscores in each side of init.  
+```
+    def __init__(self,*args):
+        Model.__init__(self,*args)
+        self.name="Greedy Myopia"
+```
+This function is called when an object is initiated. It initiates the  
+Model object by passing arguments (e.g., parameters and prospects) to it.  
+Then we define the *name* attribute and set a name for our model.  
+(if you are curios about why we need to pass *self* each time, read [here](https://www.w3schools.com/python/gloss_python_self.asp)).  
+
+The next mandatory function is *Predict* (remember - Python is case sensitive, use capital P).  
+Predict has to do a few things before making predictions:  
+(1) Read the parameter/s and store it/them in an appropriate attribute (which should start with an underscore).  
+To make our model more versitile, we will write some code that can read two  types of parameters:  
+A dictionary (what we usually use in this tutorial), or a list (a simple array).  
+(2) In every iteration (simulation), generate new outcomes ONLY if reGenerate==True.  
+(3) Make a predictions matrix (this is where the magic happens), save it in self._predictions,  
+and return the predictions.  
+
+
+```
+    def Predict(self, reGenerate=True):  # reGenerate gets a default value of True if not set
+        if type(self.parameters)==dict:  # Did the user input parameters as a dictionary?
+            self._g=self.parameters['Gamma'] # Store the value in self._g
+        elif type(self.parameters)==list: # Not a dict; was it a list?
+            self._g=self.parameters[0] # Read the first value in the list into self._g
+        else: # Not a list and not a dict? Raise an error to the user (stops execution)
+            raise Exception("Parameters should be a list or a dictionary")        
+```
+
+The next line sets up a 3-dimensional matrix (filled with zeros, hence the name) with number of rows  
+corresponding to the number of trials, and number of columns corresponding to the number  
+of prospects. There are *nsim* matrices, each represents the result of one simulation.  
+
+`grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_))`
+
+Let's start simulating behavior, this is the main part of our model:  
+```
+        for s in range(self.nsim):
+            if reGenerate:
+                for p in self.prospects:
+                    p.Generate()
+            data=np.vstack([x.outcomes for x in self.prospects]).transpose()
+            for i in range(self._trials_):
+                if i==0 or np.random.rand()>self._g:
+                    choice=np.random.choice(self._Num_of_prospects_)
+                    grand_choices[s,i,choice]=1
+                else:
+                    choice=np.argmax(data[i-1])
+                    grand_choices[s,i,choice]=1
+        self._pred_choices_=np.mean(grand_choices,axis=0)
+        return self._pred_choices_
+```
+
+Let's take it line by line:  
+
+`for s in range(self.nsim):` - loop *nsim* times  
+
+```
+            if reGenerate:
+                for p in self.prospects:
+                    p.Generate()
+```
+If the model is defined to reGenerate,  go over each prospect  
+and generate new outcomes.  
+
+`data=np.vstack([x.outcomes for x in self.prospects]).transpose()`  
+This line above takes the outcomes of all prospects, and stack it one by one  
+so we get a matrix (*data*) where each column is a prospect, and each row is a trial.  
+
+```
+for i in range(self._trials_):
+```
+Iterate over trials (remember: Python indexing starts from 0, so i==0 is the first trial).  
+
+```
+                if i==0 or np.random.rand()>self._g:
+                    choice=np.random.choice(self._Num_of_prospects_)
+                    grand_choices[s,i,choice]=1
+```
+
+If it is the first trial, OR a random number (between 0 and 1) is  
+greater than Gamma, draw a random prospect.  
+self._Num_of_prospects_ stores the number of prospects in the model, so if we have 3 prospects,
+this line of code draws 0,1 or 2 and stores it in *choice*.  
+Then, place *1* in the corresponding place (according to the simulation number,  
+trial number, and selected prospect).
+
+```
+                else:
+                    choice=np.argmax(data[i-1])
+                    grand_choices[s,i,choice]=1
+```
+In every other case, the choice is the prospect with the highest value.  
+*np.argmax* returns the **index** of the max number. For instance:  
+`np.argmax([40,50,100,0,-3,10])`
+Returns *2*, which is the index of 100.  
+**Important**: For simplicity, we ignore cases where we have ties (more than one max).  
+Whenever there are ties, the first index will be chosen.  
+When you program a real model, you better address it (e.g., choose randomly between the best outcomes).  
+
+```
+        self._pred_choices_=np.mean(grand_choices,axis=0)
+        return self._pred_choices_
+```
+After all simulations are completed, average over simulation, store in self._pred_choices_  
+and return it.  
+
+The whole model:
+```
+class GreedyMyopia(Model):
+    def __init__(self,*args):
+        Model.__init__(self,*args)
+        self.name="Greedy Myopia"
+    def Predict(self, reGenerate=True):
+        if type(self.parameters)==dict:
+            self._g=self.parameters['Gamma']
+        elif type(self.parameters)==list:
+            self._g=self.parameters[0]
+        else:
+            raise Exception("Parameters should be a list or a dictionary")        
+        grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_))
+        for s in range(self.nsim):
+            if reGenerate:
+                for p in self.prospects:
+                    p.Generate()
+            data=np.vstack([x.outcomes for x in self.prospects]).transpose()
+            for i in range(self._trials_):
+                if i==0 or np.random.rand()>self._g:
+                    choice=np.random.choice(self._Num_of_prospects_)
+                    grand_choices[s,i,choice]=1
+                else:
+                    choice=np.argmax(data[i-1])
+                    grand_choices[s,i,choice]=1
+        self._pred_choices_=np.mean(grand_choices,axis=0)
+        return self._pred_choices_
+```
+
+Now you can play around with the model, see what predictions you are getting  
+for different Gammas, plot the results, etc. Here is a quick start for you to copy&paste:  
+```
+gm=GreedyMyopia({'Gamma':1}, [A,B], 1000)
+predicted=gm.Predict()
+print(predicted.mean(axis=0))
+gm.plot_predicted()
+```
+
+Having difficulties formulating your own model?  
+(1) Take a look at the code for [other models in the package](https://github.com/ofiryakobi/debm/blob/main/Models.py).  
+(2) Ask for help in our [Google discussion group](https://groups.google.com/g/debm_package).  
+
+
+More Tips and Tricks
+----
+Save the predictions of your model, for example:  
+yourmodel.save_predictions("c:\\filePath\\morepath\\chooseName.csv")  
 
 Features that will be added in the future
 ----
-multiprocessors
-partial feedback
-more estimation methods
-new models
-individual differences
+This package will be periodically updated with new features and models.  
+The planned features include:  
+(1) Multiprocessor support (for faster estimation).  
+(2) Support of partial feedback.  
+(3) Additional built-in estimation algorithms.  
+(4) New models.  
+(5) Built-in support for individual differences analyses and estimation.  
+
 

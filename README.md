@@ -707,11 +707,11 @@ Please send your code and explanation to ofiryakobi+debm (at) gmail (dot) com
 More Tips and Tricks
 ----
 Save the predictions of a model to a file, for example:  
-modelname.save_predictions("c:\\filePath\\morepath\\chooseName.csv")  
+`modelname.save_predictions("c:\\filePath\\morepath\\chooseName.csv")`  
 
 Features that will be added in the future
 ----
-This package will be periodically updated with new features and models.  
+This package will be periodically updated with new features, models, and bug fixes.  
 The planned features include:  
 (1) Multiprocessor support (for faster estimation).  
 (2) Support of partial feedback.  

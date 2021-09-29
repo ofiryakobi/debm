@@ -36,6 +36,8 @@ class Model:
             return(self._obs_choices_)
     def get_predictions(self):
         return(self._pred_choices_)
+    def save_predictions(self, fname):
+        np.savetxt(fname, self._pred_choices_,'%10.5f',delimiter=',',newline='\n')
     def loss(self,loss="MSE",scope="prospectwise"):
         if loss.upper() in ["MSE","MSD"]:
             if scope.lower() in ["bitwise","bit","bw"]:
@@ -134,6 +136,4 @@ class Model:
         res=dict(bestp=bestp,minloss=minloss,losses=tmpm_array,parameters_checked=pars_dicts)
         self.parameters=bestp
         return res
-    def Simplex(self,method,*args): #Brute force - try all in kappa_list
-        res=minimize(fun=self.CalcLoss,x0=[1],args=args,method=method,options=dict(maxiter=100000))
-        return(res)
+

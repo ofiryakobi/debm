@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 class Prospect:
     """
     This is a prospect in a decision-making problem.
@@ -57,6 +58,7 @@ class Prospect:
         gt=np.zeros(n)
         for i in range(n):
             self.Generate()
+            other.Generate()
             gt[i]=100*np.sum(self.outcomes==other.outcomes)/self._trials
         print(f'The first prospect equals the second one in {gt.mean()}% of the trials.')
     def __gt__(self,other):
@@ -66,6 +68,7 @@ class Prospect:
         gt=np.zeros(n)
         for i in range(n):
             self.Generate()
+            other.Generate()
             gt[i]=100*np.sum(self.outcomes>other.outcomes)/self._trials
         print(f'The first prospect is better than the second one in {gt.mean()}% of the trials.')
     def __lt__(self,other):
@@ -75,5 +78,29 @@ class Prospect:
         gt=np.zeros(n)
         for i in range(n):
             self.Generate()
+            other.Generate()
             gt[i]=100*np.sum(self.outcomes<other.outcomes)/self._trials
         print(f'The first prospect is worse than the second one in {gt.mean()}% of the trials.')
+    def plot(self, blocks=None,nsim=1000):
+        grand=np.zeros((self._trials,nsim))
+        for i in range(nsim):
+            self.Generate()
+            grand[:,i]=self.outcomes
+        data=grand.mean(axis=1)
+        fig, axes = plt.subplots(1,1)
+        if blocks==None:
+            axes.plot(data,linewidth=2)
+            axes.set_title("Outcomes over trials")
+            axes.set_xlabel("Trial")
+            axes.set_ylabel("Value")
+            axes.set_xticks(range(self._trials))
+            axes.set_xticklabels(list(range(1,1+self._trials)))
+        else:
+            axes.plot(np.mean(np.split(data,blocks),axis=1),linewidth=2,marker='o')
+            axes.set_title("Outcomes over trials")
+            axes.set_xlabel("Block")
+            axes.set_ylabel("Value")
+            axes.set_xticks(range(blocks))
+            axes.set_xticklabels(list(range(1,1+blocks)))
+        return fig,axes
+        

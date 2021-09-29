@@ -657,7 +657,7 @@ When you program a real model, you better address it (e.g., choose randomly betw
 After all simulations are completed, average over simulation, store in self._pred_choices_  
 and return it.  
 
-The whole model:
+**The complete model:**
 ```
 class GreedyMyopia(Model):
     def __init__(self,*args):

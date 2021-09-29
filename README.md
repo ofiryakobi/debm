@@ -26,7 +26,7 @@ Correct existing models, suggest improvements
 Did you find an error in one of the models, a result that does not replicate, or found a more efficient way to write an existing code?
 Please email me at ofiryakobi+debm (at) gmail.com
 
-Make sure you are always up to date
+Make sure you are always up-to-date
 ----
 **Important** - one of the essential goals for this package is to keep coding free of errors and bugs.  
 If code is being corrected, you will not be able to enjoy it until you update your existing package.
@@ -267,8 +267,9 @@ C>B
 You will note that prospect C is better than B most of the time, but its expected value is worse.  
 
 Next, we define the mode. This model (RL_delta_rule) has another argument we need to pass, called "choice rule".  
-Currently, there is only 'best' choice rule available (i.e., agents choose the best of the options based on the Q value in each step).  
-In the future, other choice rules such as *epsilon-greedy* will be added.  
+Here we chose the 'best' choice rule (i.e., agents choose the best option based on the Q values in each step).  
+There is also an Epsilon-greedy choice rule, which requires another parameter (Epsilon).  
+This choice rule states that a random choice is made in probability Epsilon, otherwise the best option is selected.  
 
 ```
 myModel=RL_delta_rule('best',{'Alpha':0.5}, [A,B,C], 1000)
@@ -718,5 +719,5 @@ The planned features include:
 (3) Additional built-in estimation algorithms.  
 (4) New models.  
 (5) Built-in support for individual differences analyses and estimation.  
-
+(6) Add popular tasks (e.g., Iowa Gambling Task).
 

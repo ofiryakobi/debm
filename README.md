@@ -688,7 +688,7 @@ class GreedyMyopia(Model):
 ```
 
 Now you can play around with the model, see what predictions you are getting  
-for different Gammas, plot the results, etc. Here is a quick start for you to copy&paste:  
+for different Gammas, plot the results, etc. Here is a quick start to copy&paste:  
 ```
 gm=GreedyMyopia({'Gamma':1}, [A,B], 1000)
 predicted=gm.Predict()
@@ -697,14 +697,17 @@ gm.plot_predicted()
 ```
 
 Having difficulties formulating your own model?  
-(1) Take a look at the code for [other models in the package](https://github.com/ofiryakobi/debm/blob/main/Models.py).  
+(1) Take a look at the code of [other models in the package](https://github.com/ofiryakobi/debm/blob/main/Models.py).  
 (2) Ask for help in our [Google discussion group](https://groups.google.com/g/debm_package).  
 
 
+Is your model used in a published paper (or a pre-print)?  
+Please send your code and explanation to ofiryakobi+debm (at) gmail (dot) com  
+
 More Tips and Tricks
 ----
-Save the predictions of your model, for example:  
-yourmodel.save_predictions("c:\\filePath\\morepath\\chooseName.csv")  
+Save the predictions of a model to a file, for example:  
+modelname.save_predictions("c:\\filePath\\morepath\\chooseName.csv")  
 
 Features that will be added in the future
 ----

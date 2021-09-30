@@ -103,4 +103,7 @@ class Prospect:
             axes.set_xticks(range(blocks))
             axes.set_xticklabels(list(range(1,1+blocks)))
         return fig,axes
-        
+    def __str__(self):
+        return str(self.outcomes)
+    def __repr__(self):
+        return str(self.outcomes)    

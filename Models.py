@@ -190,8 +190,7 @@ class SAW(Model):
             ws=np.random.choice(a=[0,0.5],p=[1-W,W],size=self._trials_-1)
             for i in range(self._trials_-1):
                 consider=np.random.uniform(size=self._Num_of_prospects_)>D**((i+1)/(i+2))
-                if np.sum(consider)<1:
-                    consider[np.random.randint(consider.shape[0])]=True
+                consider[np.random.randint(0,self._Num_of_prospects_)]=True
                 consider=np.where(consider)[0]
                 idx=np.random.choice(i+1,size=K)
                 means[i,consider]=(1-ws[i])*data[idx][:,consider].mean(axis=0)+ws[i]*data[0:i+1,consider].mean(axis=0)
@@ -259,29 +258,57 @@ class RL_delta_rule(Model):
     def Predict(self, reGenerate=True):
         if not self.FullFeedback:
             raise Exception("This model does not currently work with partial-feedback data")
-        if type(self.parameters)==dict:
-            self._A=self.parameters['Alpha']
-        elif type(self.parameters) in [list, np.ndarray]:
-            self._A=self.parameters[0]
-        else:
-            self._A=self.parameters
-        if self._A<0 or  self._A>1: 
-            self._pred_choices_=np.full_like(self._pred_choices_, np.inf)
-            return self._pred_choices_
-        grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_),dtype=np.int16)
-        for s in range(self.nsim):
-            if reGenerate:
-                for p in self.prospects:
-                    p.Generate()
-            data=np.vstack([x.outcomes for x in self.prospects]).transpose()
-            Qs=np.zeros_like(data)
-            choices=np.zeros(self._trials_,dtype=np.int16)
-            choices[0]=np.random.randint(0,self._Num_of_prospects_)
-            grand_choices[s,0,choices[0]]=1
-            for i in range(1,self._trials_):
-                Qs[i]=Qs[i-1]*(1-self._A)+data[i-1]*self._A
-                choices[i]=np.random.choice(np.argwhere(Qs[i,:]==np.amax(Qs[i,:])).flatten())
-                grand_choices[s,i,choices[i]]=1
+        if self._choice_rule_.lower()=='best':
+            if type(self.parameters)==dict:
+                self._A=self.parameters['Alpha']
+            elif type(self.parameters) in [list, np.ndarray]:
+                self._A=self.parameters[0]
+            else:
+                self._A=self.parameters
+            if self._A<0 or  self._A>1: #If parameters are out of bound
+                self._pred_choices_=np.full_like(self._pred_choices_, 9999)
+                return self._pred_choices_
+            grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_),dtype=np.int16)
+            for s in range(self.nsim):
+                if reGenerate:
+                    for p in self.prospects:
+                        p.Generate()
+                data=np.vstack([x.outcomes for x in self.prospects]).transpose()
+                Qs=np.zeros_like(data)
+                choices=np.zeros(self._trials_,dtype=np.int16)
+                choices[0]=np.random.randint(0,self._Num_of_prospects_)
+                grand_choices[s,0,choices[0]]=1
+                for i in range(1,self._trials_):
+                    Qs[i]=Qs[i-1]*(1-self._A)+data[i-1]*self._A
+                    choices[i]=np.random.choice(np.argwhere(Qs[i,:]==np.amax(Qs[i,:])).flatten())
+                    grand_choices[s,i,choices[i]]=1
+        elif self._choice_rule_.lower() in ["egreedy","e-greedy","epsilon-greedy"]:
+            if type(self.parameters)==dict:
+                self._A=self.parameters['Alpha']
+                self._E=self.parameters['Epsilon']
+            elif type(self.parameters) in [list, np.ndarray]:
+                self._A=self.parameters[0]
+                self._E=self.parameters[1]
+            else:
+                raise Exception("Parameters must be inside a dictionary or a list")
+            if self._A<0 or  self._A>1 or self._E<0 or self._E>1:  #If parameters are out of bound
+                self._pred_choices_=np.full_like(self._pred_choices_, 9999)
+                return self._pred_choices_
+            grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_),dtype=np.int16)
+            for s in range(self.nsim):
+                if reGenerate:
+                    for p in self.prospects:
+                        p.Generate()
+                data=np.vstack([x.outcomes for x in self.prospects]).transpose()
+                Qs=np.zeros_like(data)
+                choices=np.zeros(self._trials_,dtype=np.int16)
+                for i in range(self._trials_):
+                    if i==0 or np.random.rand()<self._E:
+                        choices[i]=np.random.randint(0,self._Num_of_prospects_)
+                    else:
+                        Qs[i]=Qs[i-1]*(1-self._A)+data[i-1]*self._A
+                        choices[i]=np.random.choice(np.argwhere(Qs[i,:]==np.amax(Qs[i,:])).flatten())
+                    grand_choices[s,i,choices[i]]=1
         self._pred_choices_=np.mean(grand_choices,axis=0)
         return(self._pred_choices_)
         

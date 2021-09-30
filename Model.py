@@ -6,7 +6,8 @@ from scipy.optimize import minimize
 class Model:
     def __init__(self,parameters, prospects,nsim,FullFeedback=True):
         """
-        Model's parameters: 
+        A Basic unit storing parameters, prospects and the number of simulations 
+        required to make predictions.
         """
         if len(set([p._trials for p in prospects]))>1:
             raise Exception("Number of trials differ between prospects")
@@ -107,7 +108,9 @@ class Model:
             reGenerate=kwargs['reGenerate']
         except:
             reGenerate=True            
-
+        if len(args)==3: #reGenerated is passed! the length depends on the number of arguments in the loss function
+            reGenerate=args[0]
+            args=args[1:3]
         if args[0].upper() in ['AMLE','AML']: 
             if not callable(self._obs_choices_):
                 raise Exception("For an aMLE to work, the observed choices of the model should be a function - for generating outcomes in every iteration")
@@ -120,7 +123,7 @@ class Model:
             return(np.mean(LLs))
         else:
             _=self.Predict(reGenerate)
-            return(self.loss(*args))
+            return self.loss(*args)
     def OptimizeBF(self,pars_dicts,pb=False,*args,**kwargs): #Brute force - try all in kappa_list
         if type(self._obs_choices_)==None:
             raise Exception("You have to store observations in the model first before fitting")

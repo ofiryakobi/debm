@@ -17,13 +17,18 @@
     <p><br>
     </p>
     <h1>A description of objects and methods</h1>
-    Refer to the <a href="https://github.com/ofiryakobi/debm/blob/main/README.md"
-      target="_blank">readme </a>file for a quick start with examples and use
-    cases.<br>
-    <p>This package includes built-in plotting functionalities, here are a few
-      illustrations:</p>
+    <p>Refer to the <a href="https://github.com/ofiryakobi/debm/blob/main/README.md"
+        target="_blank">readme </a>file for a quick start with examples and use
+      cases.</p>
     <p><br>
     </p>
+    <p><em>A few illustrations of the basic built-in plotting functions</em></p>
+    <p><img src="https://raw.githubusercontent.com/ofiryakobi/debm/main/img/fit.png"
+        alt="plot_fit" style="width: 343px; height: 257px;"><img src="https://github.com/ofiryakobi/debm/raw/main/img/outcomes.png"
+        alt="Prospect.outcome" style="width: 315px; height: 258px;"><img src="https://github.com/ofiryakobi/debm/raw/main/img/res_optimization_2d.png"
+        alt="Optimization_plot" style="width: 346px; height: 259px;"><img src="https://github.com/ofiryakobi/debm/raw/main/img/res_optimization_3d.JPG"
+        alt="3D figure of the loss function" style="width: 298px; height: 247px;"></p>
+    <br>
     <p><br>
     </p>
     <hr>
@@ -304,6 +309,12 @@
     <p>In case of a two-parameter model, will plot a 3D figure.</p>
     <p>In other cases, the X axis will show the iteration number (less useful).</p>
     <p>Returns: fig, ax (1/2 parameters) or fig, ax, surf (3 parameters).</p>
+    <p><br>
+    </p>
+    <hr>
+    <h2>A list of built-in models</h2>
+    <p><br>
+    </p>
     <p><br>
     </p>
     <p></p>

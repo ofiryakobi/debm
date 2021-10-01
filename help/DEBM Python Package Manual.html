@@ -135,8 +135,7 @@
     </p>
     <h3>Model.plot_observed(blocks=None, **args)</h3>
     <p>Plots the stored observed values in trials or blocks. Returns matplotlib
-      objects (fig, axes) for further processing of the figure.
-    </p>
+      objects (fig, axes) for further processing of the figure. </p>
     <p><em>blocks</em> - if None (default), will plot the observations over
       trials. If an integer, will split the data into blocks of size
       trials/blocks.</p>
@@ -146,8 +145,7 @@
     </p>
     <h3>Model.plot_fit(blocks=None, **args)</h3>
     <p>Plots both observed and predicted values in trials or blocks. Returns
-      matplotlib objects (fig, axes) for further processing of the figure.
-    </p>
+      matplotlib objects (fig, axes) for further processing of the figure. </p>
     <p><em>blocks</em> - if None (default), will plot the values over trials. If
       an integer, will split the data into blocks of size trials/blocks.</p>
     <p><em>**args</em> - pass keyword arguments into pyplot.plot.</p>
@@ -255,8 +253,7 @@
     </dl>
     <p><u>Example 2:</u></p>
     <p>grid=makeGrid({'Alpha':[1,2,3],'Lambda':[0.1,0.5,0.9]})</p>
-    <p>print(grid)
-    </p>
+    <p>print(grid) </p>
     <dl>
       <dd>[{'Alpha': 1, 'Lambda': 0.1},<br>
         &nbsp;{'Alpha': 1, 'Lambda': 0.5},<br>
@@ -268,8 +265,7 @@
         &nbsp;{'Alpha': 3, 'Lambda': 0.5},<br>
         &nbsp;{'Alpha': 3, 'Lambda': 0.9}]</dd>
     </dl>
-    <p><u>Example 3:</u>
-    </p>
+    <p><u>Example 3:</u> </p>
     <p>grid=makeGrid({'Alpha':np.arange(1,20,6),'Lambda':np.arange(0,1,0.3)})</p>
     <p>print(grid)</p>
     <dl>
@@ -312,11 +308,136 @@
     <p><br>
     </p>
     <hr>
+    <h2>Creating your own model</h2>
+    <p>The following is a template that one could use:&nbsp; <br>
+      <br>
+      class yourModeName(Model): <br>
+      &nbsp;&nbsp;&nbsp; def __init__(self,*args):<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Model.__init__(self,*args)<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.name="Give your model a
+      name"<br>
+      &nbsp;&nbsp;&nbsp; def Predict(self, reGenerate=True):<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if type(self.parameters)==dict:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      self._x=self.parameters['X'] # Read parameters (dict style)<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      self._y=self.parameters['Y']<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # change the
+      naming of the parameters add more if needed<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif
+      type(self.parameters)==list:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      self._x=self.parameters[0] # Read parameters (list style)<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      self._y=self.parameters[1]<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # add more if
+      needed<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise
+      Exception("Parameters should be a list or a
+      dictionary")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_))
+      #this would be an array of predicted choices<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for s in range(self.nsim):<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+      reGenerate:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      for p in self.prospects:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      p.Generate()<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      data=np.vstack([x.outcomes for x in self.prospects]).transpose() #This is
+      an array containing the outcomes from all prospects (shaped <em>trials </em>x
+      <em>prospects)</em></p>
+    <p><em></em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      for i in range(self._trials_): # In this template we iterate over trials<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      if i==0: # Assume random choice in the first trial<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      choice=np.random.choice(self._Num_of_prospects_)<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      grand_choices[s,i,choice]=1<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      else:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      # This is the main "brain" of your model<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      # Stating what happens in every trial <br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # (after the first random choice)<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # i is the trial index (starting
+      from 0)<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # s is the simulation index.<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # grand_choices is the matrix where
+      you store choices<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # You should set the chosen choice
+      to 1 in each trial (or a value between 0 to 1 if your model is built this
+      way).<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # For instance, if s=5, i=10, and
+      c=2,<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # grand_choices[s,i,c]=1 means that
+      in the 6th<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # simulation (indexing in Python
+      start from 0),<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # on the 11th trial, the 3rd choice
+      is chosen.<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # Row 11 in the 6th simulation will
+      look like that:<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # 0 0 1 (assuming there are three
+      prospects).<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      self._pred_choices_=np.mean(grand_choices,axis=0) # Average accross
+      simulations,<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; #Store internally in
+      self._pred_choices_<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return self._pred_choices_ #
+      Return the predicted choices<br>
+      ```<br>
+      <br>
+      Thus, the minimal steps for creating your own model involve&nbsp; <br>
+      setting up a name, the parameters, and writing the main algorithm (the
+      "brain" of your model).&nbsp; </p>
+    <hr>
+    <p><br>
+    </p>
     <h2>A list of built-in models</h2>
     <h3>FullData()</h3>
+    <p>Use all available historical feedback in each trial.</p>
+    <p><br>
+    </p>
     <h3>NaiveSampler(kappa_or_less)</h3>
+    <p>A K sized sample is drawn with replacement in each trial (after a first
+      random choice), and a prospect is chosen according to the best average of
+      the sample.<br>
+      In each simulation a new K is drawn from a uniform distribution between 1
+      to Kappa.<br>
+      Additionally, if kappa_or_less==True, in each trial the sample size is
+      drawn from 1 to K (thus, the sample size changes from trial to trial).</p>
+    <p>Arguments: kappa_or_less (Boolean), see explanation above.</p>
+    <p>Parameters: Kappa (integer, 1 to the number of trials).</p>
+    <h3><br>
+    </h3>
     <h3>Sample_of_K</h3>
+    <p>Sample of K is essentially the Naive Sampler, with kappa_or_less set to
+      False.</p>
+    <p>Parameters: Kappa (integer, 1 to the number of trials).</p>
+    <p><br>
+    </p>
     <h3>NaiveSampler_2S</h3>
+    <p>Two-stage Naive Sampler. In the first stage, decide between the risky
+      choices. In the second stage, decide between<br>
+      the chosen risky choice and the rest of the choices.</p>
     <h3>ISAW2</h3>
     <h3>SAW</h3>
     <h3>RL_delta_rule</h3>

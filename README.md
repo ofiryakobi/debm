@@ -528,7 +528,7 @@ If it is not specified, the default value is True (generate new outcomes in each
 
 Creating your very own model
 ----
-Finally and most importantly, you probably have your own idea of how humans make decisions.  
+Finally and most importantly, you probably have your own ideas of how humans make decisions.  
 Why not formalizing your thought into a quantifiable, reproducible model?  
 
 A model is an instance of a Model object. It means that whatever your model is,  
@@ -541,9 +541,9 @@ in *debm* share the same functions and attributes.
 Let's create a simple one-parameter model that assumes the following:  
 (1) People only care about the **last** set of outcomes they experienced.  
 (2) They will choose the best outcome in probability *Gamma* (that's the free parameter, ranging 0 to 1).  
-I named this model *GreedyMyopia*
+We will name this model *GreedyMyopia*
 
-We will take it line by line:  
+Let's take it line by line:  
 `from debm import Model`
 Import the prototype *Model* object from the *debm* package.  
 
@@ -699,6 +699,58 @@ predicted=gm.Predict()
 print(predicted.mean(axis=0))
 gm.plot_predicted()
 ```
+
+The following is a model template that one could use:  
+
+```
+class yourModeName(Model): 
+    def __init__(self,*args):
+        Model.__init__(self,*args)
+        self.name="Give your model a name"
+    def Predict(self, reGenerate=True):
+        if type(self.parameters)==dict:
+            self._x=self.parameters['X'] # Read parameters (dict style)
+			self._y=self.parameters['Y']
+			# add more if needed
+        elif type(self.parameters)==list:
+            self._x=self.parameters[0] # Read parameters (list style)
+			self._y=self.parameters[1]
+			# add more if needed
+        else:
+            raise Exception("Parameters should be a list or a dictionary")        
+        grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_))
+        for s in range(self.nsim):
+            if reGenerate:
+                for p in self.prospects:
+                    p.Generate()
+            data=np.vstack([x.outcomes for x in self.prospects]).transpose()
+            for i in range(self._trials_): # In this template we iterate over trials
+                if i==0: # Random choice in the first trial
+                    choice=np.random.choice(self._Num_of_prospects_)
+                    grand_choices[s,i,choice]=1
+                else:
+                    # This is the main "brain" of your model
+                    # Stating what happens in every trial 
+					# (after the first random choice)
+					# i is the trial index (starting from 0)
+					# grand_choices is the matrix where you store choices
+					# s is the simulation index.
+					# You should set the selected choice to 1 in each trial.
+					# For instance, if s=5, i=10, and c=2,
+					# grand_choices[s,i,c]=1 means that in the 6th
+					# simulation (indexing in Python start from 0),
+					# on the 11th trial, the 3rd choice is chosen.
+					# Row 11 in the 6th simulation will look like that:
+					# 0 0 1 (assuming there are three prospects).
+        self._pred_choices_=np.mean(grand_choices,axis=0) # Average accross simulations,
+		#Store internally in self._pred_choices_
+        return self._pred_choices_ # Return the predicted choices
+```
+
+Thus, the minimal steps for creating your own model involve  
+setting up a name, the parameters, and writing the main algorithm (the "brain" of your model).  
+
+
 
 Having difficulties formulating your own model?  
 (1) Take a look at the code of [other models in the package](https://github.com/ofiryakobi/debm/blob/main/Models.py).  

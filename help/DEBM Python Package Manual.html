@@ -7,8 +7,9 @@
     <meta name="keywords" content="DEBM">
   </head>
   <body>
-    <h2><span style="font-family: monospace;">DEBM is an open-source Python
-        package for modeling of behavior in decision-from-experience tasks.</span></h2>
+    <h2><a id="mozTocId415572" class="mozTocH2"></a><span style="font-family: monospace;">DEBM
+        is an open-source Python package for modeling of behavior in
+        decision-from-experience tasks.</span></h2>
     <p><span style="font-family: monospace;"><a href="https://github.com/ofiryakobi/debm"
           target="_blank">GitHub </a>(<a href="https://github.com/ofiryakobi/debm/blob/main/README.md"
           target="_blank">README</a>)<br>
@@ -16,7 +17,8 @@
     <hr style="color: white;">
     <p><br>
     </p>
-    <h1>A description of objects and methods</h1>
+    <h1><a id="mozTocId710582" class="mozTocH1"></a>A description of objects and
+      methods</h1>
     <p>Refer to the <a href="https://github.com/ofiryakobi/debm/blob/main/README.md"
         target="_blank">readme </a>file for a quick start with examples and use
       cases.</p>
@@ -32,7 +34,8 @@
     <p><br>
     </p>
     <hr>
-    <h2>Prospect(trials, fun, oneOutcomePerRun, *args, **kwargs)</h2>
+    <h2><a id="mozTocId675128" class="mozTocH2"></a>Prospect(trials, fun,
+      oneOutcomePerRun, *args, **kwargs)</h2>
     <p>Construct a prospect in a decision-making problem.</p>
     <p><em>trials</em> - an integer defining the number of rounds in the choice
       problem.</p>
@@ -47,17 +50,17 @@
     <p><code>A=Prospect(100,np.random.choice,False,[3,0],100,True,[0.45,0.55])</code></p>
     <p><br>
     </p>
-    <h3>Prospect.Generate()</h3>
+    <h3><a id="mozTocId32139" class="mozTocH3"></a>Prospect.Generate()</h3>
     <p>Generate new outcomes (stored internally).</p>
-    <h3>Prospect.EV(EVsims=10000)</h3>
+    <h3><a id="mozTocId512228" class="mozTocH3"></a>Prospect.EV(EVsims=10000)</h3>
     <p>Calculate the expected value, based on <em>EVsims </em>simulations.</p>
-    <h3>Prospect.plot(blocks=None,nsim=1000)</h3>
+    <h3><a id="mozTocId20662" class="mozTocH3"></a>Prospect.plot(blocks=None,nsim=1000)</h3>
     <p>Plot the outcomes based on <em>nsim </em>simulations.<br>
       If blocks is None - plot all trials; Else, aggregate over <em>blocks</em>
       blocks.</p>
     <p>Returns: fig, ax </p>
     <p></p>
-    <h3>Operators</h3>
+    <h3><a id="mozTocId431929" class="mozTocH3"></a>Operators</h3>
     <p>A&gt;B - the proportion of times the outcomes of A are greater than the
       outcomes of B, based on 1000 simulations (works with '&lt;' as well).</p>
     <p>A==B - the proportion of times the outcomes of A equal the outcomes of B,
@@ -69,7 +72,8 @@
     <hr>
     <p><br>
     </p>
-    <h2>Model(parameters, prospects, nsim, FullFeedback=True)</h2>
+    <h2><a id="mozTocId800368" class="mozTocH2"></a>Model(parameters, prospects,
+      nsim, FullFeedback=True)</h2>
     <p>Construct a model object which includes the environment (the
       decision-making problem formulates in <em>prospects</em>, the behavior of
       the agents and their <em>parameters</em>), the number of simulations
@@ -90,7 +94,7 @@
       refer to the documentation of the specific model you are using.</p>
     <p><br>
     </p>
-    <h3>Model.set_obs_choices(oc)</h3>
+    <h3><a id="mozTocId328994" class="mozTocH3"></a>Model.set_obs_choices(oc)</h3>
     <p>Store the observed choices internally (mandatory for plotting model's fit
       or estimating the model's parameters).</p>
     <p><em>oc</em> - an array with a shape of <em>trials </em>x <em>prospects
@@ -98,20 +102,20 @@
       inclusive.</p>
     <p><br>
     </p>
-    <h3>Model.get_predictions() </h3>
+    <h3><a id="mozTocId187026" class="mozTocH3"></a>Model.get_predictions() </h3>
     <p>Returns the currently stored predictions. Could be None if no predictions
       were made (i.e., Model.Predict() was not run, and the model was not fitted
       to data).</p>
     <p>Returns an array with a shape of <em>trials </em>x <em>prospects.</em></p>
     <p><em><br>
       </em></p>
-    <h3>Model.save_predictions(fname)</h3>
+    <h3><a id="mozTocId162929" class="mozTocH3"></a>Model.save_predictions(fname)</h3>
     <p>Save currently stored predictions into a csv file.</p>
     <p><em>fname </em>- file name to save the data to (<strong>note: </strong>will
       override the file).</p>
     <p><br>
     </p>
-    <h3>Model.loss(loss="MSE",scope="prospectwise")</h3>
+    <h3><a id="mozTocId932574" class="mozTocH3"></a>Model.loss(loss="MSE",scope="prospectwise")</h3>
     <p>Returns the value of the loss function using the stored parameters,
       predictions, and observations.</p>
     <p><em>loss</em> - the loss function. Either MSE (a.k.a MSD) or LL (minus
@@ -123,7 +127,8 @@
     <p>Returns a float.</p>
     <p><br>
     </p>
-    <h3>Model.plot_predicted(blocks=None, **args)</h3>
+    <h3><a id="mozTocId409399" class="mozTocH3"></a>Model.plot_predicted(blocks=None,
+      **args)</h3>
     <p>Plots the stored predicted values in trials or blocks. Returns matplotlib
       objects (fig, axes) for further processing of the figure.</p>
     <p><em>blocks</em> - if None (default), will plot the predictions over
@@ -133,7 +138,8 @@
     <p>Returns: Fig, Axes.</p>
     <p><br>
     </p>
-    <h3>Model.plot_observed(blocks=None, **args)</h3>
+    <h3><a id="mozTocId556754" class="mozTocH3"></a>Model.plot_observed(blocks=None,
+      **args)</h3>
     <p>Plots the stored observed values in trials or blocks. Returns matplotlib
       objects (fig, axes) for further processing of the figure. </p>
     <p><em>blocks</em> - if None (default), will plot the observations over
@@ -143,7 +149,8 @@
     <p>Returns: Fig, Axes.</p>
     <p><br>
     </p>
-    <h3>Model.plot_fit(blocks=None, **args)</h3>
+    <h3><a id="mozTocId531943" class="mozTocH3"></a>Model.plot_fit(blocks=None,
+      **args)</h3>
     <p>Plots both observed and predicted values in trials or blocks. Returns
       matplotlib objects (fig, axes) for further processing of the figure. </p>
     <p><em>blocks</em> - if None (default), will plot the values over trials. If
@@ -152,7 +159,8 @@
     <p>Returns: Fig, Axes.</p>
     <p><br>
     </p>
-    <h3>Model.CalcLoss(parameters, *args, **kwargs)</h3>
+    <h3><a id="mozTocId526554" class="mozTocH3"></a>Model.CalcLoss(parameters,
+      *args, **kwargs)</h3>
     <p>Similar to Model.loss, only that parameters are passed and
       Model.Predict() is run before returning the loss.<br>
       Useful for using external optimization algorithms that pass parameters as
@@ -174,7 +182,8 @@
     <p><em></em>Example: Model.CalcLoss({'Alpha':2.3}, 'MSE', 'pw').</p>
     <p>Returns a float representing the loss function at the particular point in
       <em>parameters</em>.</p>
-    <h3>Model.OptimizeBF(pars_dicts, pb=False, *args, **kwargs)</h3>
+    <h3><a id="mozTocId613134" class="mozTocH3"></a>Model.OptimizeBF(pars_dicts,
+      pb=False, *args, **kwargs)</h3>
     <p>An exhaustive grid search (defined by the user). Returns the best set of
       parameters that were searched.<br>
       Slow, but works with all types of models.</p>
@@ -196,9 +205,9 @@
     <p>Example:</p>
     <p>pspace=makeGrid({'Alpha':range(0,101), 'Lambda':np.arange(0,1,0.001})</p>
     <p>results=myModel.OptimizeBF(pspace, True,False,'MSE','pw')</p>
-    <h3><br>
+    <h3><a id="mozTocId491452" class="mozTocH3"></a><br>
     </h3>
-    <h3>Model.Predict(reGenerate=True)</h3>
+    <h3><a id="mozTocId338241" class="mozTocH3"></a>Model.Predict(reGenerate=True)</h3>
     <p></p>
     <p>This function is specified by the specific model, and generates the
       predictions of the model.</p>
@@ -210,7 +219,7 @@
     <hr>
     <p><br>
     </p>
-    <h2>FitMultiGame(models,obs_choices)</h2>
+    <h2><a id="mozTocId505491" class="mozTocH2"></a>FitMultiGame(models,obs_choices)</h2>
     <p>This object allows fitting over multiple models and observations, for
       examples when agents complete more than one decision-making problem.</p>
     <p><em>models</em> - a list of models. All models should be of the same type
@@ -220,18 +229,20 @@
       choices.</p>
     <p><br>
     </p>
-    <h3>FitMultiGame.CalcLoss(parameters, *args, **kwargs)</h3>
+    <h3><a id="mozTocId393796" class="mozTocH3"></a>FitMultiGame.CalcLoss(parameters,
+      *args, **kwargs)</h3>
     Calculate the loss over all models specified for a given set of parameters.
     <p>See Model.CalcLoss for the description of arguments.</p>
     <br>
-    <h3>FitMultiGame.OptimizeBF(pars_dicts, pb=False, *args, **kwargs)</h3>
+    <h3><a id="mozTocId150889" class="mozTocH3"></a>FitMultiGame.OptimizeBF(pars_dicts,
+      pb=False, *args, **kwargs)</h3>
     <p>Fit over all models. For a detailed description of the arguments and
       returned value, see Model.OptimizeBF.</p>
     <hr>
-    <h2>Helper functions</h2>
-    <h2><br>
+    <h2><a id="mozTocId851173" class="mozTocH2"></a>Helper functions</h2>
+    <h2><a id="mozTocId686899" class="mozTocH2"></a><br>
     </h2>
-    <h3>makeGrid(pars_dict)</h3>
+    <h3><a id="mozTocId280013" class="mozTocH3"></a>makeGrid(pars_dict)</h3>
     <p>Make a grid for grid search (OptimizeBF).</p>
     <p><em>pars_dict</em> - a dictionary of parameters with iterables.</p>
     <p>Returns: a list of dictionaries with a combination of all parameters'
@@ -289,16 +300,16 @@
     <p><br>
     </p>
     <p></p>
-    <h3>saveEstimation(res,fname,**kwargs)</h3>
+    <h3><a id="mozTocId947993" class="mozTocH3"></a>saveEstimation(res,fname,**kwargs)</h3>
     <p>Save estimation results to a csv file.</p>
     <p><em>res</em> - a results dictionary generated by OptimizeBF.</p>
     <p><em>fname </em>- the name of the file to be saved (<strong>note</strong>:
       overrides an existing file).</p>
     <p><em>**kwargs </em>- optional keyword arguments to be passed to
       Pandas.to_csv</p>
-    <h2><br>
+    <h2><a id="mozTocId805327" class="mozTocH2"></a><br>
     </h2>
-    <h3>resPlot(res)</h3>
+    <h3><a id="mozTocId185378" class="mozTocH3"></a>resPlot(res)</h3>
     <p>Plot the results of a <em>results </em>dictionary (generated by
       OptimizeBF)</p>
     <p>In case of a one-parameter model, will plot a 2D figure.</p>
@@ -308,7 +319,7 @@
     <p><br>
     </p>
     <hr>
-    <h2>Creating your own model</h2>
+    <h2><a id="mozTocId246002" class="mozTocH2"></a>Creating your own model</h2>
     <p>The following is a template that one could use:&nbsp; <br>
       <br>
       class yourModeName(Model): <br>
@@ -411,12 +422,12 @@
     <hr>
     <p><br>
     </p>
-    <h2>A list of built-in models</h2>
-    <h3>FullData()</h3>
+    <h2><a id="mozTocId570622" class="mozTocH2"></a>A list of built-in models</h2>
+    <h3><a id="mozTocId849521" class="mozTocH3"></a>FullData()</h3>
     <p>Use all available historical feedback in each trial.</p>
     <p><br>
     </p>
-    <h3>NaiveSampler(kappa_or_less)</h3>
+    <h3><a id="mozTocId693561" class="mozTocH3"></a>NaiveSampler(kappa_or_less)</h3>
     <p>A K sized sample is drawn with replacement in each trial (after a first
       random choice), and a prospect is chosen according to the best average of
       the sample.<br>
@@ -426,23 +437,24 @@
       drawn from 1 to K (thus, the sample size changes from trial to trial).</p>
     <p>Arguments: kappa_or_less (Boolean), see explanation above.</p>
     <p>Parameters: Kappa (integer, 1 to the number of trials).</p>
-    <h3><br>
+    <h3><a id="mozTocId502010" class="mozTocH3"></a><br>
     </h3>
-    <h3>Sample_of_K</h3>
+    <h3><a id="mozTocId709179" class="mozTocH3"></a>Sample_of_K</h3>
     <p>Sample of K is essentially the Naive Sampler, with kappa_or_less set to
       False.</p>
     <p>Parameters: Kappa (integer, 1 to the number of trials).</p>
     <p><br>
     </p>
-    <h3>NaiveSampler_2S</h3>
+    <h3><a id="mozTocId69551" class="mozTocH3"></a>NaiveSampler_2S</h3>
     <p>Two-stage Naive Sampler. In the first stage, decide between the risky
       choices. In the second stage, decide between<br>
       the chosen risky choice and the rest of the choices.</p>
-    <h3>ISAW2</h3>
+    <h3><a id="mozTocId975871" class="mozTocH3"></a>ISAW2</h3>
     <h3>SAW</h3>
-    <h3>RL_delta_rule</h3>
-    <h3>Population_1or99</h3>
-    <h3>Population_1or3f</h3>
+    <p>Special methods: Optimize_Simplex</p>
+    <h3><a id="mozTocId397188" class="mozTocH3"></a>RL_delta_rule</h3>
+    <h3><a id="mozTocId6276" class="mozTocH3"></a>Population_1or99</h3>
+    <h3><a id="mozTocId871954" class="mozTocH3"></a>Population_1or3f</h3>
     <p><br>
     </p>
     <p></p>

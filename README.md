@@ -7,7 +7,7 @@ DEBM is a **playground** for modeling behavior in the decision from experience p
 
 The rational behind DEBM is to  
 ----
-(1) Make behavioral modeling science more replicable.  
+(1) Enhancing replicability in the behavioral sciences.  
 (2) Make modeling accessible for people with limited programming skills.  
 (3) Be a central repository for published models.  
 (4) Speed up the process of comparing, assessing and developing behavioral models.  
@@ -22,12 +22,12 @@ Add your own model
 ----
 Follow this tutorial to develop your own model, or re-write an existing model into the DEBM package.
 Currently, only published models, or those in the process of publishing (e.g., submitted papers), will be included in the package.
-Send your code to ofiryakobi+debm (at) gmail.com with a reference to a pre-print or the published paper describing the model.
+Send your code to debm.package (at) gmail.com with a reference to a pre-print or the published paper describing the model.
 
 Correct existing models, suggest improvements
 ----
 Did you find an error in one of the models, a result that does not replicate, or found a more efficient way to write an existing code?
-Please email me at ofiryakobi+debm (at) gmail.com
+Please email debm.package (at) gmail.com
 
 Make sure you are always up-to-date
 ----
@@ -758,7 +758,7 @@ Having difficulties formulating your own model?
 
 
 Is your model used in a published paper (or a pre-print)?  
-Please send your code and explanation to ofiryakobi+debm (at) gmail (dot) com  
+Please send your code and explanation to debm.package (at) gmail (dot) com  
 
 More Tips and Tricks
 ----

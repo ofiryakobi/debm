@@ -5,8 +5,8 @@ def resPlot(res):
     losses=res['losses']
     checked=res['parameters_checked']
     if len(checked[0])>2:
-        raise Warning("More than two parameters - plotting iterations instead of parameters")
-        xaxis=range(1,len(losses))
+        print("More than two parameters - plotting iterations instead of parameters")
+        xaxis=range(1,len(losses)+1)
         fig, axes = plt.subplots(1,1)
         axes.plot(xaxis,losses)
         axes.set_ylabel("Loss")

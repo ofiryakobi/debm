@@ -95,7 +95,6 @@ class Population_1or3f(Model):
         Model.__init__(self,*args)
         self.name="Population first 1 or 3"
     def Predict(self):
-        print("predict pop1or99_1")
         grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_),dtype=np.int16)
         for s in range(self.nsim):
             K=np.random.choice([1,3])# New Kappa for each simulation (e.g., each agent) drawn from a uni distribution of [1-K]
@@ -161,6 +160,16 @@ class SAW(Model):
         self._W=self.parameters['Omega']
         self._D=self.parameters['Delta']
         self.name="SAW"
+    def Optimize_Simplex(self, parameters,*args,**kwargs):
+        """
+        Does not change Kappa (int), pass only Omega and Delta
+        """
+        if type(self.parameters) in [list,np.ndarray]:
+            return self.CalcLoss(np.concatenate([[self.parameters[0]],parameters]), *args,**kwargs)
+        elif type(self.parameters)==dict:
+            return self.CalcLoss(np.concatenate([[self.parameters['Kappa']],parameters]), *args,**kwargs)
+        else:
+            raise Exception("Parameters should be entered correctly as a dictionairy or list (Kappa,Omega,Delta)")
     def Predict(self, reGenerate=True):
         if not self.FullFeedback:
             raise Exception("This model does not work with partial-feedback data")
@@ -168,12 +177,14 @@ class SAW(Model):
             self._K=int(self.parameters['Kappa'])
             self._W=self.parameters['Omega']
             self._D=self.parameters['Delta']
-        elif type(self.parameters)==list:
+        elif type(self.parameters) in [list,np.ndarray]:
             self._K=int(self.parameters[0])
             self._W=self.parameters[1]
             self._D=self.parameters[2]
         else:
             raise Exception("Parameters should be entered correctly as a dictionairy or list (Kappa,Omega,Delta)")
+        if self._K<1 or self._W>1 or self._W<0 or self._D>1 or self._D<0:
+            return np.full((self._trials_,self._Num_of_prospects_), 9999)
         grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_),dtype=np.int16)
         for s in range(self.nsim):
             K=np.random.randint(1,self._K+1)

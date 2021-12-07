@@ -247,7 +247,7 @@ determined by Alpha (ranges 0 to 1), where low values represent slow learning ra
 
 This model is also included with the basic models supplied with *debm*, we can import it by adding RL_delta_rule to the import statement we already have in our code,  
 or add another line (for orgnization reasons, it is better to place import statements at the beginning of the script):  
-`from debm import RL_delta_rule`
+`from debm import RL_delta_rule` (note that you need to run this line of code in order for it to take effect, not just write it in the editor).
 
 Let's start by defining our prospects:  
 ```
@@ -257,7 +257,7 @@ B=Prospect(trials,np.random.choice,False,[1.6,-20],trials,True,[0.97,0.03])
 C=Prospect(trials,np.random.choice,False,[1.7,-20],trials,True,[0.94,0.06])
 ```
 
-Note that instead of writing "100" every time, we stored it in a variable called *trials* and then passed to the Prospects this variable.  
+Note that instead of writing "100" every time, we stored it in a variable called *trials* and then passed it to Prospects.  
 If we want to change the number of trials, we can just change the value in this variable, and not each instance of a related model or prospect.  
 Our prospects could be formulated as A: 3, p=0.45, 0 otherwise; B: 1.6, p=0.97, -20 otherwise; and C: 1.7, p=0.94, -20 otherwise.  
 

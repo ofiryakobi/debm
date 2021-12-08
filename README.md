@@ -157,7 +157,8 @@ Fitting
 ----
 
 If we want to estimate the parameters of the model, we need real human data observations.  
-Download the following example [https://github.com/ofiryakobi/debm/blob/master/help/ex1.csv](https://github.com/ofiryakobi/debm/blob/master/help/ex1.csv) to your computer.  
+Download the following example [https://github.com/ofiryakobi/debm/blob/master/help/ex1.csv](https://github.com/ofiryakobi/debm/blob/master/help/ex1.csv) to your computer. 
+To download: click the link above, press "raw", and then Ctrl+s (Save file).  
 Make sure you know the path of the file you downloaded (e.g., c:\users\myName\downloads\).  
 
 Add the following line of code to your script, and change the path to the real file path:  

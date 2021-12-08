@@ -141,10 +141,10 @@ In our case, StatusQuo was entered first and corresponds to *A*.
 Multiprocessing support
 ----
 DEBM supports multiprocessing (i.e., using more than one CPU in parallel for reducing computation time).
-Currently, multiprocessing is supported in 'OptimizeBF' method (grid search fitting, see below), which is the most computational demanding task.
-Multiprocessing is easy to use: after setting up a model, use 'model.mp=n' to set up your model in order to use 'n' CPUs.
+Currently, multiprocessing is supported in `OptimizeBF` method (grid search fitting, see below), which is the most computational demanding task.
+Multiprocessing is easy to use: after setting up a model, use `model.mp=n` to set up your model in order to use `n` CPUs.
 For example, 'sok1.mp=6' will set up the model to use *six CPUs when fitting the model.
-'sok1.mp=1' will turn off multiprocessing support.
+`sok1.mp=1` will turn off multiprocessing support.
 
 ** How many CPUs should I use? **
 The short answer is - the more CPUs, the faster the code will run.
@@ -223,7 +223,7 @@ To save the estimation's results to a csv file, use:
 
 You can save a lot of computation time by using multiprocessing (see the section above).
 Simply configure your model to use more than one CPU:
-'sok1.mp=10' #This will set your model to use 10 CPUs (if you have less than 10 CPUs, it will use of all of them).
+`sok1.mp=10` #This will set your model to use 10 CPUs (if you have less than 10 CPUs, it will use of all of them).
 
 Run OptimizeBF again, now when multiprocessing is enabled (note: this is exactly the same line of code as before):
 `res1=sok1.OptimizeBF(pspace,True,'MSD','pw')`

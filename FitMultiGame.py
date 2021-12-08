@@ -12,10 +12,12 @@ class FitMultiGame(): #All models should be of the same type
             m.set_obs_choices(self._obs_choices[i])
             l=m.CalcLoss(par,*args, **kwargs)
             losses[i]=l
-        if len(args)==3: #reGenerated is passed! the length depends on the number of arguments in the loss function
-            loss=args[2]
-        else:
+        if len(args)==3: #reGenerate is passed. the length depends on the number of arguments in the loss function
             loss=args[1]
+        elif len(args)==2:
+            loss=args[0]
+        else:
+            raise Exception('Wrong number of arguments: '+str(args))
         if loss.upper()=="MSE":
             return(np.mean(losses))
         elif loss.upper()=="LL":
@@ -35,3 +37,22 @@ class FitMultiGame(): #All models should be of the same type
                 bestp=p
         res=dict(bestp=bestp,minloss=minloss,losses=tmpm_array,parameters_checked=pars_dicts)                
         return res
+    @property
+    def mp(self):
+        return self._mp
+    @mp.setter
+    def mp(self, new_value):
+        if type(new_value)==int:
+            if new_value>1:
+                self._mp = np.min([new_value,mp.cpu_count()])
+                print("Multiprocessing is now on for this model.")
+                print("Your computer has {} available CPUs. You chose to use {} CPUs.".format(mp.cpu_count(),self._mp))
+            else:
+                self._mp=None
+                print("Your computer has {} available CPUs.".format(mp.cpu_count()))
+                print("Multiprocessing is now disabled for this model")
+        else:
+            self._mp=None
+            print("Your computer has {} available CPUs.".format(mp.cpu_count()))
+            print("None numeric input. Multiprocessing is now disabled for this model")
+    

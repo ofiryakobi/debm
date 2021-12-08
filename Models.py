@@ -1,7 +1,7 @@
 import numpy as np
 from .Model import Model
 class NaiveSampler(Model):
-    def __init__(self,kappa_or_less,*args): #Kappa_or_less should be true if using the same as Yakobi et al. 2020
+    def __init__(self,kappa_or_less,*args): #Kappa_or_less should be true if using the same model as Yakobi et al. 2020
         Model.__init__(self,*args)
         self._K=self.parameters['Kappa']
         self._Kappa_or_less=kappa_or_less

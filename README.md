@@ -12,6 +12,7 @@ The rational behind DEBM is to
 (3) Be a central repository for published models.  
 (4) Speed up the process of comparing, assessing and developing behavioral models.  
 (5) Facilitate teaching and intuition of decision-making models.  
+(6) Built-in support for multiprocessing, reducing estimation and fitting time.
 
 DEBM contains the basic building blocks of behavioral models, alongside built-in models from the decision-making literature.  
 The full code is available above in the present GitHub repository.  
@@ -137,6 +138,20 @@ If you want to aggregate over blocks, you can simply type the number of blocks:
 Regardless to the names you gave each prospect, they will be named in the figure according to their order in the model (A, B, C...Z).  
 In our case, StatusQuo was entered first and corresponds to *A*.  
 
+Multiprocessing support
+----
+DEBM supports multiprocessing (i.e., using more than one CPU in parallel for reducing computation time).
+Currently, multiprocessing is supported in 'OptimizeBF' method (grid search fitting, see below), which is the most computational demanding task.
+Multiprocessing is easy to use: after setting up a model, use 'model.mp=n' to set up your model in order to use 'n' CPUs.
+For example, 'sok1.mp=6' will set up the model to use *six CPUs when fitting the model.
+'sok1.mp=1' will turn off multiprocessing support.
+
+** How many CPUs should I use? **
+The short answer is - the more CPUs, the faster the code will run.
+If you want to know the number of CPUs on your machine, simply type 'sok1.mp=0'.
+This line of code will disable multiprocessing but also prints out the number of CPUs.
+
+* assuming there are six CPUs. If there are less than six CPUs, all CPUs will be used.
 
 Fitting
 ----
@@ -205,6 +220,14 @@ Now we can plot the fit, e.g. over five blocks of 20 trials:
 
 To save the estimation's results to a csv file, use:  
 `saveEstimation(res1,'c:\\your_desired_path\\results.csv')`  
+
+You can save a lot of computation time by using multiprocessing (see the section above).
+Simply configure your model to use more than one CPU:
+'sok1.mp=10' #This will set your model to use 10 CPUs (if you have less than 10 CPUs, it will use of all of them).
+
+Run OptimizeBF again, now when multiprocessing is enabled (note: this is exactly the same line of code as before):
+`res1=sok1.OptimizeBF(pspace,True,'MSD','pw')`
+You will notice a significant improvement in run speed.
 
 
 More advanced user can use external packages (e.g. SciPy) for optimization, using the CalcLoss function which accepts parameters and returns the loss.

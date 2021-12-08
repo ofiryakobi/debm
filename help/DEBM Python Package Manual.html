@@ -216,6 +216,23 @@
     <p>Returns an array of predictions with a shape of <em>trials </em>x <em>prospects.</em>These
       predictions are also internally stored for further usage (e.g., plotting
       or fitting).</p>
+    <p><br>
+    </p>
+    <h3><a name="Model.mp" id="Model.mp"></a>Model.mp=int</h3>
+    <p>Configure multiprocessing. Multiprocessing allows faster code execution
+      by utilizing more than one CPU at the time.</p>
+    <p><u>Example:</u></p>
+    <p>Model.mp=6 #use six CPUs.</p>
+    <p>Model.mp=1 #Disable multiprocessing. Any number smaller than 2 will have
+      the same effect of disabling multiprocessing.</p>
+    <p>Note (1): If the number of chosen CPUs is smaller than the number of
+      available CPUs, all CPUs will be used.</p>
+    <p>Note (2): Currently multiprocessing affects OptimizeBF method only.</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p></p>
     <hr>
     <p><br>
     </p>

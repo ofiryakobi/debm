@@ -3,6 +3,8 @@ import itertools
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
+import multiprocessing as mp
+from functools import partial
 class Model:
     def __init__(self,parameters, prospects,nsim,FullFeedback=True):
         """
@@ -21,6 +23,7 @@ class Model:
         self.parameters=parameters #Should be a dictionairy
         self.name=None
         self.FullFeedback=FullFeedback
+        self._mp=None
     def set_obs_choices(self,oc): #Validate and save observed choices
         if callable(oc):
             self._obs_choices_=oc
@@ -125,6 +128,11 @@ class Model:
             _=self.Predict(reGenerate)
             return self.loss(*args)
     def OptimizeBF(self,pars_dicts,pb=False,*args,**kwargs): #Brute force - try all in kappa_list
+        if self._mp==None:
+            return self.sp_OptimizeBF(pars_dicts,pb,*args,**kwargs)
+        else:
+            return self.mp_OptimizeBF(pars_dicts,pb,*args,**kwargs)
+    def sp_OptimizeBF(self,pars_dicts,pb=False,*args,**kwargs): #Brute force - try all in kappa_list
         if type(self._obs_choices_)==None:
             raise Exception("You have to store observations in the model first before fitting")
         minloss=9999
@@ -139,4 +147,45 @@ class Model:
         res=dict(bestp=bestp,minloss=minloss,losses=tmpm_array,parameters_checked=pars_dicts)
         self.parameters=bestp
         return res
+    def mp_OptimizeBF(self,pars_dicts,pb=False,*args,**kwargs): #Brute force - try all in kappa_list
+        if type(self._obs_choices_)==None:
+            raise Exception("You have to store observations in the model first before fitting")
+        minloss=9999
+        bestp=None
+        if pb:
+            with mp.Pool(mp.cpu_count()) as pool:
+                tmpm_array=list(tqdm(pool.imap(partial(_mpoptimizebf_,self,*args,**kwargs),pars_dicts),total=len(pars_dicts)))
+        else:
+            with mp.Pool(mp.cpu_count()) as pool:
+                tmpm_array=pool.map(partial(_mpoptimizebf_,self,*args,**kwargs),pars_dicts)
+            
+        minloss=np.min(tmpm_array)
+        bestp=pars_dicts[np.argmin(tmpm_array)]
+        res=dict(bestp=bestp,minloss=minloss,losses=tmpm_array,parameters_checked=pars_dicts)
+        self.parameters=bestp
+        return res
+    @property
+    def mp(self):
+        return self._mp
+    @mp.setter
+    def mp(self, new_value):
+        if type(new_value)==int:
+            if new_value>1:
+                self._mp = np.min([new_value,mp.cpu_count()])
+                print("Multiprocessing is now on for this model.")
+                print("Your computer has {} available CPUs. You chose to use {} CPUs.".format(mp.cpu_count(),self._mp))
+            else:
+                self._mp=None
+                print("Your computer has {} available CPUs.".format(mp.cpu_count()))
+                print("Multiprocessing is now disabled for this model")
+        else:
+            self._mp=None
+            print("Your computer has {} available CPUs.".format(mp.cpu_count()))
+            print("None numeric input. Multiprocessing is now disabled for this model")
+
+def _mpoptimizebf_(self,*args,**kwargs): # Helper function for multiprocessing
+    p=args[-1]
+    args=args[:-1]
+    #raise Exception(self,p,args,kwargs)
+    return self.CalcLoss(p,*args,**kwargs)
 

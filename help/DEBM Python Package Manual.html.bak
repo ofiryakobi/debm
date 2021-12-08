@@ -451,7 +451,7 @@
       the chosen risky choice and the rest of the choices.</p>
     <h3><a id="mozTocId975871" class="mozTocH3"></a>ISAW2</h3>
     <h3>SAW</h3>
-    <p>Special methods: OptimizeSimplex</p>
+    <p>Special methods: Optimize_Simplex</p>
     <h3><a id="mozTocId397188" class="mozTocH3"></a>RL_delta_rule</h3>
     <h3><a id="mozTocId6276" class="mozTocH3"></a>Population_1or99</h3>
     <h3><a id="mozTocId871954" class="mozTocH3"></a>Population_1or3f</h3>

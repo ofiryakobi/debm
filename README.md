@@ -148,7 +148,7 @@ For example, 'sok1.mp=6' will set up the model to use *six CPUs when fitting the
 
 ** How many CPUs should I use? **
 The short answer is - the more CPUs, the faster the code will run.
-If you want to know the number of CPUs on your machine, simply type 'sok1.mp=0'.
+If you want to know the number of CPUs on your machine, simply type `sok1.mp=0`.
 This line of code will disable multiprocessing but also prints out the number of CPUs.
 
 * assuming there are six CPUs. If there are less than six CPUs, all CPUs will be used.

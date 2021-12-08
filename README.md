@@ -780,7 +780,7 @@ More Tips and Tricks
 ----
 Save the predictions of a model to a file, for example:  
 `modelname.save_predictions("c:\\filePath\\morepath\\chooseName.csv")`  
-For example, to the the GreedyMyopia model's predcitions simulated above, type:
+For example, to save the GreedyMyopia model's predcitions simulated above, type:
 `gm.save_predictions("c:\\filePath\\morepath\\GreedyMyopia_predictions.csv")`
 
 Features that will be added in the future
@@ -791,7 +791,7 @@ The planned features include:
 (2) Additional built-in estimation algorithms.  
 (3) New models.  
 (4) Built-in support for individual differences analyses and estimation.  
-(5) Add popular tasks (e.g., Iowa Gambling Task).
-(6) Add multiprocessing capabilities to multigame fitting.
-..
+(5) Add popular tasks (e.g., Iowa Gambling Task).  
+(6) Add multiprocessing capabilities to multigame fitting.  
+..  
 So don't forget to periodically update *DEBM* using `pip install debm -U`

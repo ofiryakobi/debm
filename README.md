@@ -792,6 +792,5 @@ The planned features include:
 (3) New models.  
 (4) Built-in support for individual differences analyses and estimation.  
 (5) Add popular tasks (e.g., Iowa Gambling Task).  
-(6) Add multiprocessing capabilities to multigame fitting.  
-..  
+  
 So don't forget to periodically update *DEBM* using `pip install debm -U`

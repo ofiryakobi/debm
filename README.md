@@ -1,6 +1,6 @@
 # A Python package for Decision from Experience Behavior Modeling (DEBM)
 
-DEBM is a **playground** for modeling behavior in the decision from experience paradigm (Barron & Erev, 2003), developed by Dr. Ofir Yakobi. 
+DEBM is a **playground** for modeling behavior in the decision from experience paradigm (Barron & Erev, 2003), developed by Ofir Yakobi. 
 
 [Click here for the complete manual](https://rawcdn.githack.com/ofiryakobi/debm/7e69c4a9b8fe031ec1eb64e6c631fc40cf5c7bc2/help/DEBM%20Python%20Package%20Manual.html).
 

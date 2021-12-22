@@ -2,7 +2,7 @@
 
 DEBM is a **playground** for modeling behavior in the decision from experience paradigm (Barron & Erev, 2003), developed by Ofir Yakobi. 
 
-[Click here for the complete manual](https://rawcdn.githack.com/ofiryakobi/debm/7e69c4a9b8fe031ec1eb64e6c631fc40cf5c7bc2/help/DEBM%20Python%20Package%20Manual.html).
+[Click here for the complete manual](https://rawcdn.githack.com/ofiryakobi/debm/128313256a3e9a7f676c4d9c73c30189a721a088/help/DEBM%20Python%20Package%20Manual.html).
 
 
 The rational behind DEBM is to  

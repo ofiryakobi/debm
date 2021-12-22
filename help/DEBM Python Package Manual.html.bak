@@ -39,14 +39,16 @@
     <p>Construct a prospect in a decision-making problem.</p>
     <p><em>trials</em> - an integer defining the number of rounds in the choice
       problem.</p>
+    <p><em>fun </em>- a functions that returns numeric outcomes (or an outcome,
+      if oneOutcomePerRun is True).</p>
     <p><em>oneOutcomePerRun - </em>Boolean, if True - when generating the
       outcomes, the function runs <em>trials</em> number of times. If False,
       the function should return an array of outcomes in the size of <em>trials</em>.</p>
     <p><em>*args, **kwargs </em>- Arguments to be passed to <em>fun</em>.</p>
     <p><u>Example</u><strong>:</strong> </p>
     <p><br>
-      Use NumPy's random.choice to generate 100 outcomes: each outcome is 3 (in
-      probability 0.45), or otherwise zero.</p>
+      Use NumPy's random.choice to generate 100 outcomes: each outcome is 3 with
+      probability 0.45 and zero otherwise.</p>
     <p><code>A=Prospect(100,np.random.choice,False,[3,0],100,True,[0.45,0.55])</code></p>
     <p><br>
     </p>
@@ -58,7 +60,7 @@
     <p>Plot the outcomes based on <em>nsim </em>simulations.<br>
       If blocks is None - plot all trials; Else, aggregate over <em>blocks</em>
       blocks.</p>
-    <p>Returns: fig, ax </p>
+    <p>Returns: <em>fig, ax</em></p>
     <p></p>
     <h3><a id="mozTocId431929" class="mozTocH3"></a>Operators</h3>
     <p>A&gt;B - the proportion of times the outcomes of A are greater than the
@@ -75,10 +77,10 @@
     <h2><a id="mozTocId800368" class="mozTocH2"></a>Model(parameters, prospects,
       nsim, FullFeedback=True)</h2>
     <p>Construct a model object which includes the environment (the
-      decision-making problem formulates in <em>prospects</em>, the behavior of
+      decision-making problem formulated in <em>prospects</em>, the behavior of
       the agents and their <em>parameters</em>), the number of simulations
-      required for making predictions, and whether the decision-task<br>
-      is full or partial feedback.</p>
+      required for making predictions, and whether the decision-task provides
+      full or partial feedback.</p>
     <p><em>parameters</em> - a dictionary (preferred) or a list of parameters'
       values. For instance {'Lambda': 0.1}. The value could be None (if no
       predictions are needed) or numeric.</p>
@@ -98,7 +100,7 @@
     <p>Store the observed choices internally (mandatory for plotting model's fit
       or estimating the model's parameters).</p>
     <p><em>oc</em> - an array with a shape of <em>trials </em>x <em>prospects
-      </em>(i.e., each prospect is a column). Values should range 0 to 1,
+      </em>(i.e., each prospect is a column). Values should range from 0 to 1,
       inclusive.</p>
     <p><br>
     </p>
@@ -115,7 +117,8 @@
       override the file).</p>
     <p><br>
     </p>
-    <h3><a id="mozTocId932574" class="mozTocH3"></a>Model.loss(loss="MSE",scope="prospectwise")</h3>
+    <h3><a id="mozTocId932574" class="mozTocH3"></a>Model.loss(loss="MSE",
+      scope="prospectwise")</h3>
     <p>Returns the value of the loss function using the stored parameters,
       predictions, and observations.</p>
     <p><em>loss</em> - the loss function. Either MSE (a.k.a MSD) or LL (minus
@@ -186,12 +189,13 @@
       pb=False, *args, **kwargs)</h3>
     <p>An exhaustive grid search (defined by the user). Returns the best set of
       parameters that were searched.<br>
-      Slow, but works with all types of models.</p>
+      Slow, but works with all types of models. Note that multiprocessing is
+      supported for reducing run time.</p>
     <p><em>pars_dicts </em>- a list of dictionaries, where each dictionary
       contains values for all parameters in the model. For example:</p>
     <p>[{'Alpha':0.1, 'Lambda':0.1}, {'Alpha':0.1, 'Lambda':0.2}, {'Alpha':0.1,
       'Lambda':0.3}, {'Alpha':0.2, 'Lambda':0.1},....]</p>
-    <p><em> pb -&nbsp; </em>show a progress bar (True/False)</p>
+    <p><em> pb -&nbsp; </em>show a progress bar (True/False).</p>
     <p><em>*args - </em>arguments to be passed to CalcLoss.</p>
     <p><em> **kwargs </em>- keyword arguments to be passed to CalcLoss.</p>
     <p>Returns a dictionary of results, with the following keys:</p>
@@ -204,22 +208,40 @@
     <p><u>Tip</u>: use <em>makeGrid </em>to create <em>pars_dicts</em>.</p>
     <p>Example:</p>
     <p>pspace=makeGrid({'Alpha':range(0,101), 'Lambda':np.arange(0,1,0.001})</p>
-    <p>results=myModel.OptimizeBF(pspace, True,False,'MSE','pw')</p>
+    <p>results=myModel.OptimizeBF(pspace, True, 'MSE', 'pw')</p>
     <h3><a id="mozTocId491452" class="mozTocH3"></a><br>
     </h3>
     <h3><a id="mozTocId338241" class="mozTocH3"></a>Model.Predict(reGenerate=True)</h3>
     <p></p>
-    <p>This function is specified by the specific model, and generates the
-      predictions of the model.</p>
+    <p>This function is the core behavioral model that generates predictions
+      according to the given prospects.</p>
     <p>It accepts reGenerate as an input, which determines if the outcomes of
       each prospect are re-generated in each simulation.</p>
     <p>Returns an array of predictions with a shape of <em>trials </em>x <em>prospects.</em>These
       predictions are also internally stored for further usage (e.g., plotting
       or fitting).</p>
+    <p><br>
+    </p>
+    <h3><a name="Model.mp" id="Model.mp"></a>Model.mp=int</h3>
+    <p>Configure multiprocessing. Multiprocessing allows faster code execution
+      by utilizing more than one CPU at the time.</p>
+    <p><u>Example:</u></p>
+    <p>Model.mp=6 #use six CPUs.</p>
+    <p>Model.mp=1 #Disable multiprocessing. Any number smaller than 2 will have
+      the same effect of disabling multiprocessing.</p>
+    <p>Note (1): If the number of chosen CPUs is smaller than the number of
+      available CPUs, all CPUs will be used.</p>
+    <p>Note (2): Currently multiprocessing affects OptimizeBF method only.</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p></p>
     <hr>
     <p><br>
     </p>
-    <h2><a id="mozTocId505491" class="mozTocH2"></a>FitMultiGame(models,obs_choices)</h2>
+    <h2><a id="mozTocId505491" class="mozTocH2"></a>FitMultiGame(models,
+      obs_choices)</h2>
     <p>This object allows fitting over multiple models and observations, for
       examples when agents complete more than one decision-making problem.</p>
     <p><em>models</em> - a list of models. All models should be of the same type
@@ -237,7 +259,7 @@
     <h3><a id="mozTocId150889" class="mozTocH3"></a>FitMultiGame.OptimizeBF(pars_dicts,
       pb=False, *args, **kwargs)</h3>
     <p>Fit over all models. For a detailed description of the arguments and
-      returned value, see Model.OptimizeBF.</p>
+      returned values, see <em>Model.OptimizeBF</em>.</p>
     <hr>
     <h2><a id="mozTocId851173" class="mozTocH2"></a>Helper functions</h2>
     <h2><a id="mozTocId686899" class="mozTocH2"></a><br>
@@ -300,9 +322,10 @@
     <p><br>
     </p>
     <p></p>
-    <h3><a id="mozTocId947993" class="mozTocH3"></a>saveEstimation(res,fname,**kwargs)</h3>
+    <h3><a id="mozTocId947993" class="mozTocH3"></a>saveEstimation(res, fname,
+      **kwargs)</h3>
     <p>Save estimation results to a csv file.</p>
-    <p><em>res</em> - a results dictionary generated by OptimizeBF.</p>
+    <p><em>res</em> - a results dictionary generated by <em>OptimizeBF</em>.</p>
     <p><em>fname </em>- the name of the file to be saved (<strong>note</strong>:
       overrides an existing file).</p>
     <p><em>**kwargs </em>- optional keyword arguments to be passed to
@@ -315,7 +338,8 @@
     <p>In case of a one-parameter model, will plot a 2D figure.</p>
     <p>In case of a two-parameter model, will plot a 3D figure.</p>
     <p>In other cases, the X axis will show the iteration number (less useful).</p>
-    <p>Returns: fig, ax (1/2 parameters) or fig, ax, surf (3 parameters).</p>
+    <p>Returns: <em>fig, ax</em> (one or two parameters) or fig, ax, surf (3
+      parameters).</p>
     <p><br>
     </p>
     <hr>

@@ -4,7 +4,7 @@ DEBM is a **playground** for modeling behavior in the decision from experience p
 
 [Click here for the complete manual](https://rawcdn.githack.com/ofiryakobi/debm/128313256a3e9a7f676c4d9c73c30189a721a088/help/DEBM%20Python%20Package%20Manual.html).  
   
-When using this package please cite: Yakobi, O., & Roth, Y. (2022). Decision from Experience Behavior Modeling (DEBM): an open-source Python package for developing, evaluating, and visualizing behavioral models. https://doi.org/10.31234/osf.io/3emdw
+**When using this package please cite:** Yakobi, O., & Roth, Y. (2022). Decision from Experience Behavior Modeling (DEBM): an open-source Python package for developing, evaluating, and visualizing behavioral models. https://doi.org/10.31234/osf.io/3emdw
 
 
 The rational behind DEBM 

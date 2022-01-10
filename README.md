@@ -2,10 +2,12 @@
 
 DEBM is a **playground** for modeling behavior in the decision from experience paradigm (Barron & Erev, 2003), developed by Ofir Yakobi. 
 
-[Click here for the complete manual](https://rawcdn.githack.com/ofiryakobi/debm/128313256a3e9a7f676c4d9c73c30189a721a088/help/DEBM%20Python%20Package%20Manual.html).
+[Click here for the complete manual](https://rawcdn.githack.com/ofiryakobi/debm/128313256a3e9a7f676c4d9c73c30189a721a088/help/DEBM%20Python%20Package%20Manual.html).  
+  
+When using this package please cite: Yakobi, O., & Roth, Y. (2022). Decision from Experience Behavior Modeling (DEBM): an open-source Python package for developing, evaluating, and visualizing behavioral models. https://doi.org/10.31234/osf.io/3emdw
 
 
-The rational behind DEBM is to  
+The rational behind DEBM 
 ----
 (1) Enhancing replicability in the behavioral sciences.  
 (2) Make modeling accessible for people with limited programming skills.  
@@ -81,7 +83,7 @@ The 2nd argument is an array of 100 zeros (instead of writing [0,0,0,0,0....,0])
 stating that the outcome is zero in every trial.    
 The 3rd argument passed to Prospect is boolean (True/False), and it is used when we pass a function (see below).  
   
-Now we will define a prospect that produce -10 (minus 10) 10% of the time, and +1 (a gain of one point) 90% of the time.  
+Now we will define a prospect that produces -10 (minus 10) 10% of the time, and +1 (a gain of one point) 90% of the time.  
 For that, we will use NumPy's (a popular Python package) function - np.random.choice.  
 The syntax is np.random.choice(a, size, replace, p), where:  
 a – the array of possible outcomes; size – how many samples to draw;  
@@ -239,7 +241,7 @@ The example above demonstrated fitting over the aggregated choice rates of 84 pa
 We can also fit Kappa for each individual, using the same mechanism. However, in this case an extra layer of Python programming is required.  
 (note: I plan to add a built-in functionality for individual differences estimation in the future)  
 
-Download the data of three subjects:  
+Download the data of three subjects (To download, click each link below, press "raw", and then Ctrl+s / Save file):  
 [Subject 1](https://github.com/ofiryakobi/debm/blob/master/help/sub1.csv)  
 [Subject 2](https://github.com/ofiryakobi/debm/blob/master/help/sub2.csv)  
 [Subject 3](https://github.com/ofiryakobi/debm/blob/master/help/sub3.csv)  
@@ -787,9 +789,9 @@ Features that will be added in the future
 ----
 This package will be periodically updated with new features, models, and bug fixes.  
 The planned features include:  
-(1) Support of partial feedback.  
+(1) Support for partial feedback.  
 (2) Additional built-in estimation algorithms.  
-(3) New models.  
+(3) New behavioral models.  
 (4) Built-in support for individual differences analyses and estimation.  
 (5) Add popular tasks (e.g., Iowa Gambling Task).  
   

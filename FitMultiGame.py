@@ -1,5 +1,6 @@
 import numpy as np
 from tqdm import tqdm
+import multiprocessing as mp
 class FitMultiGame(): #All models should be of the same type
     def __init__(self,models,obs_choices):
         if len(models)!=len(obs_choices):
@@ -37,22 +38,4 @@ class FitMultiGame(): #All models should be of the same type
                 bestp=p
         res=dict(bestp=bestp,minloss=minloss,losses=tmpm_array,parameters_checked=pars_dicts)                
         return res
-    @property
-    def mp(self):
-        return self._mp
-    @mp.setter
-    def mp(self, new_value):
-        if type(new_value)==int:
-            if new_value>1:
-                self._mp = np.min([new_value,mp.cpu_count()])
-                print("Multiprocessing is now on for this model.")
-                print("Your computer has {} available CPUs. You chose to use {} CPUs.".format(mp.cpu_count(),self._mp))
-            else:
-                self._mp=None
-                print("Your computer has {} available CPUs.".format(mp.cpu_count()))
-                print("Multiprocessing is now disabled for this model")
-        else:
-            self._mp=None
-            print("Your computer has {} available CPUs.".format(mp.cpu_count()))
-            print("None numeric input. Multiprocessing is now disabled for this model")
     

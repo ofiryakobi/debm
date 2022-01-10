@@ -84,6 +84,7 @@ class Model:
         axes.legend(list(map(chr,range(65,65+data.shape[1]+1))),title='Prospects')
         return(fig,axes)
     def plot_predicted(self,blocks=None,**args):
+        _=self.Predict()
         fig, axes = plt.subplots(1,1)
         return(self._plot_(fig, axes,self._pred_choices_,blocks,linewidth=2,dashes=[1],marker='o',args=args))
 
@@ -91,6 +92,7 @@ class Model:
         fig, axes = plt.subplots(1,1)
         return(self._plot_(fig, axes,self.get_obs_choices(),blocks,linewidth=2,marker='o',dashes=[],args=args))
     def plot_fit(self,blocks=None,**args):
+        _=self.Predict()
         colors=['green','black','red','blue','orange', 'purple']
         fig, axes = plt.subplots(1,1)
         fig,axes=self._plot_(fig, axes,self.get_obs_choices(),blocks,linewidth=2,marker='o',dashes=[],args=args)

@@ -131,6 +131,7 @@ Now let's make predictions, and save them to a new variable called *choices1*:
 You can `print(choices1)` to inspect the results.  
 To see the mean over all trials, type `choices1.mean(axis=0)` (axis=0 states that we want the mean over rows [trials] and not the grand mean).  
 The results should be approximately 38% and 62% as in Erev and Roth.  
+In order to print the mean in blocks of 25 trials, we can print `np.mean(np.split(choices1,4),axis=1)`. The number `4` inside the parentheses determines the number of blocks.
 
 We can easily plot the results: `sok1.plot_predicted()`  
 If you want to aggregate over blocks, you can simply type the number of blocks:  

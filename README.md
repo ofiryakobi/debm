@@ -29,7 +29,7 @@ Send your code to debm.package (at) gmail.com with a reference to a pre-print or
 
 Existing models
 ----
-The code for the built-in DEBM models can be examined [here] (https://github.com/ofiryakobi/debm/blob/main/Models.py).  
+The code for the built-in DEBM models can be examined [here](https://github.com/ofiryakobi/debm/blob/main/Models.py).  
 
 Correct existing models, suggest improvements
 ----

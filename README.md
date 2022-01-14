@@ -38,7 +38,7 @@ Please email debm.package (at) gmail.com
 
 Make sure you are always up-to-date
 ----
-**Important** - one of the essential goals for this package is to keep coding free of errors and bugs.  
+**Important** - one of the essential goals for this package is to keep models free of errors and bugs.  
 If code is being corrected, you will not be able to enjoy it until you update your existing package.
 To do that, make sure once in a while to update the package by going to the command line, and running  
 `pip install debm -U`
@@ -549,32 +549,32 @@ If it is not specified, the default value is True (generate new outcomes in each
 
 
 
-Creating your very own model
+Creating your own model
 ----
 Finally and most importantly, you probably have your own ideas of how humans make decisions.  
-Why not formalizing your thoughts into a quantifiable, reproducible model?  
+The following describes how to code your own model in DEBM.  
 
-A model is an instance of a Model object. It means that whatever your model is,  
+A model is an instance of a `Model` object. It means that whatever your model is,  
 it inherits some basic features and methods from a parent object called *Model*.  
-For example, by default your model will have an attribute named parameters, nsim,  
-name, and more. It will have built-in functions such as OptimizeBF (that we have seen earlier).  
+For example, by default, your model will have an attribute named `parameters`, `nsim`,  
+`name`, and more. It will have built-in functions such as `OptimizeBF` (that was introduced earlier).  
 It is convenient because you don't have to program all of it from scratch. Furthermore, all models  
-in *debm* share the same functions and attributes.  
+in *DEBM* share the same functions, structure, and attributes.  
 
-Let's create a simple one-parameter model that assumes the following:  
+As an example, we will create a simple one-parameter model that assumes the following:  
 (1) People only care about the **last** set of outcomes they experienced.  
-(2) They will choose the best outcome in probability *Gamma* (that's the free parameter, ranging from 0 to 1).  
+(2) They will choose the best outcome with probability *Gamma* (that is the free parameter, ranging from 0 to 1).  
 We will name this model *GreedyMyopia*
 
-Let's creaite it line by line:  
+Let's create it line by line:  
 `from debm import Model`
-Import the prototype *Model* object from the *debm* package.  
+Import the prototype *Model* object from the *DEBM* package.  
 
 `class GreedyMyopia(Model):`  
-We define objects in python using the class statement. Here we state that GreedyMyopia  
+We define objects in python using the `class` statement. Here we state that GreedyMyopia  
 is a type of *Model*.  
 
-There are two functions (i.e., starting with *def*) that are mandatory:  
+There are two functions that are mandatory:  
 __init__(self) - note the double underscores in each side of init.  
 ```
     def __init__(self,*args):
@@ -584,16 +584,17 @@ __init__(self) - note the double underscores in each side of init.
 This function is called when an object is initiated. It initiates the  
 Model object by passing arguments (e.g., parameters and prospects) to it.  
 Then we define the *name* attribute and set a name for our model.  
-(if you are curios about why we need to pass *self* each time, read [here](https://www.w3schools.com/python/gloss_python_self.asp)).  
+(if you are curious about why we need to pass *self* each time, read [here](https://www.w3schools.com/python/gloss_python_self.asp)).  
 
 The next mandatory function is *Predict* (remember - Python is case sensitive, use capital P).  
-Predict has to do a few things before making predictions:  
-(1) Read the parameter/s and store it/them in an appropriate attribute (which should start with an underscore).  
-To make our model more versitile, we will write some code that can read two  types of parameters:  
+Each model in DEBM should have a `Predict` function.  
+`Predict` has to do a few things before making predictions:  
+(1) Read the parameters and store them in an appropriate attribute (which should start with an underscore).  
+To make our model more versitile, we will write some code that can accept parameters in two forms:  
 A dictionary (what we usually use in this tutorial), or a list (a simple array).  
-(2) In every iteration (simulation), generate new outcomes ONLY if reGenerate==True.  
-(3) Make a predictions matrix (this is where the magic happens), save it in self._predictions,  
-and return the predictions.  
+(2) In every iteration (simulation), generate new outcomes ONLY if `reGenerate` is True.  
+(3) Make a prediction matrix (this is where the actual generation of predictions), save it under `self._predictions`,  
+and return these predictions.  
 
 
 ```
@@ -630,7 +631,7 @@ Let's start simulating behavior, this is the main part of our model:
         return self._pred_choices_
 ```
 
-Let's take it line by line:  
+Let's examine each line of code:  
 
 `for s in range(self.nsim):` - loop *nsim* times  
 
@@ -639,8 +640,7 @@ Let's take it line by line:
                 for p in self.prospects:
                     p.Generate()
 ```
-If the model is defined to reGenerate,  go over each prospect  
-and generate new outcomes.  
+If the model is defined to `reGenerate`, go over each prospect and generate new outcomes. When our prospects are stochastic, it is important to do that.  
 
 `data=np.vstack([x.outcomes for x in self.prospects]).transpose()`  
 The line above takes the outcomes of all prospects, and stack it one by one  
@@ -649,7 +649,7 @@ so we get a matrix (*data*) where each column is a prospect, and each row is a t
 ```
 for i in range(self._trials_):
 ```
-Iterate over trials (remember: Python indexing starts from 0, so i==0 is the first trial).  
+Iterate over trials (remember: indexing starts from 0 in Python - i==0 is the first trial).  
 
 ```
                 if i==0 or np.random.rand()>self._g:
@@ -723,7 +723,7 @@ print(predicted.mean(axis=0))
 gm.plot_predicted()
 ```
 
-The following is a model template that one could use:  
+The following is a generic *DEBM* model template:  
 
 ```
 class yourModeName(Model): 
@@ -771,19 +771,19 @@ class yourModeName(Model):
 ```
 
 Thus, the minimal steps for creating your own model involve  
-setting up a name, the parameters, and writing the main algorithm (the "brain" of your model).  
+setting up a name, the parameters, and writing the main prediction algorithm (the "brain" of your model).  
 
 
 
 Having difficulties formulating your own model?  
 (1) Take a look at the code of [other models in the package](https://github.com/ofiryakobi/debm/blob/main/Models.py).  
 (2) Ask for help in our [Google discussion group](https://groups.google.com/g/debm_package).  
-
+(3) Email me.
 
 Is your model used in a published paper (or a pre-print)?  
 Please send your code and explanation to debm.package (at) gmail (dot) com  
 
-More Tips and Tricks
+More features
 ----
 Save the predictions of a model to a file, for example:  
 `modelname.save_predictions("c:\\filePath\\morepath\\chooseName.csv")`  
@@ -800,4 +800,4 @@ The planned features include:
 (4) Built-in support for individual differences analyses and estimation.  
 (5) Add popular tasks (e.g., Iowa Gambling Task).  
   
-So don't forget to periodically update *DEBM* using `pip install debm -U`
+Don't forget to periodically update *DEBM* using `pip install debm -U`

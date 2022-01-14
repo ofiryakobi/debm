@@ -27,6 +27,10 @@ Follow this tutorial to develop your own model, or re-write an existing model in
 Currently, only published models, or those in the process of publication (e.g., submitted papers), will be included in the package.
 Send your code to debm.package (at) gmail.com with a reference to a pre-print or the published paper describing the model.
 
+Existing models
+----
+The code for the built-in DEBM models can be examined [here] (https://github.com/ofiryakobi/debm/blob/main/Models.py).  
+
 Correct existing models, suggest improvements
 ----
 Did you find an error in one of the models, a result that does not replicate, or found a more efficient way to write an existing code?

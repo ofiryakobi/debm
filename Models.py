@@ -188,7 +188,7 @@ class SAW(Model):
         grand_choices=np.zeros((self.nsim,self._trials_,self._Num_of_prospects_),dtype=np.int16)
         for s in range(self.nsim):
             K=np.random.randint(1,self._K+1)
-            W=np.random.uniform(0,self._W)
+            W=self._W
             D=np.random.uniform(0,self._D)
             if reGenerate:
                 for p in self.prospects:
@@ -198,11 +198,12 @@ class SAW(Model):
             means=np.full((data.shape[0]-1,data.shape[1]),-np.inf,dtype=np.float16)
             choices[0]=np.random.randint(0,self._Num_of_prospects_)
             grand_choices[s,0,choices[0]]=1
-            ws=np.random.choice(a=[0,0.5],p=[1-W,W],size=self._trials_-1)
+            ws=np.random.choice(a=[0,0.5],p=[1-W,W],size=self._trials_)
             for i in range(self._trials_-1):
-                consider=np.random.uniform(size=self._Num_of_prospects_)>D**((i+1)/(i+2))
-                consider[np.random.randint(0,self._Num_of_prospects_)]=True
-                consider=np.where(consider)[0]
+                consider=set({np.random.randint(0,self._Num_of_prospects_)})
+                remaining=np.array(list(set(range(self._Num_of_prospects_))-consider))
+                consider|=set(remaining[np.where(np.random.uniform(size=self._Num_of_prospects_-1)>D**((i+1)/(i+2)))[0]])
+                consider=np.array(list(consider))
                 idx=np.random.choice(i+1,size=K)
                 means[i,consider]=(1-ws[i])*data[idx][:,consider].mean(axis=0)+ws[i]*data[0:i+1,consider].mean(axis=0)
                 choices[i+1]=np.random.choice(np.argwhere(means[i,:]==np.amax(means[i,:])).flatten())
@@ -210,6 +211,7 @@ class SAW(Model):
         self._pred_choices_=np.mean(grand_choices,axis=0)
         self._predictions_dict_[self._K]=self._pred_choices_
         return(self._pred_choices_)
+
 
 
 class NaiveSampler_2S(Model):

@@ -1,4 +1,4 @@
-__version__="0.1.8"
+__version__="0.1.9"
 from distutils.version import StrictVersion
 import threading
 import urllib.request, json 

@@ -385,7 +385,7 @@ estimateRL1=RL_delta_rule('best',{'Alpha':None}, [A,B], 1000)
 estimateRL2=RL_delta_rule('best',{'Alpha':None}, [B,C], 1000)
 ```
 
-Now for the new object we need to get familiar with: FitMultiGame.  
+Now for the new object we need to get familiar with: `FitMultiGame`.  
 It's pretty straight-forward, we pass the array of models (or games), and the array of "observations".  
 ```
 fitted_over_two_Tasks=FitMultiGame([estimateRL1,estimateRL2],[agents1,agents2])
@@ -393,6 +393,7 @@ fitted_over_two_Tasks=FitMultiGame([estimateRL1,estimateRL2],[agents1,agents2])
 
 From this point forward, fitting is similar to single task fitting (note that you also need to set the observations):  
 ```
+fitted_over_two_Tasks.mp=5 # We can set multiprocessing support  
 res_fit_2tasks=fitted_over_two_Tasks.OptimizeBF(pspace, True, 'MSE', 'PW')
 ```
 Note that we used pspace (the parameters grid we defined earlier), but you may want to re-define it to test other values.  

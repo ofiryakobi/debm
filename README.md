@@ -187,7 +187,7 @@ We can even plot the fit of the current predicted choices (the ones we generated
 
 You can see that the fit is not great. We can quantify it, using `sok1.loss(loss_function, scope).`  
 loss_function could be MSD (mean squared deviation; identical to MSE) or -LL (negative log-likelihood),  
-and the scope should be either *prospectwise* (comparing one value for each prospect), or *bitwise* (comparing each trial of each prospect).  
+and the scope should be *prospectwise* (comparing one value for each prospect), *bitwise* (comparing each trial of each prospect), or *blockwise* (e.g., 5blocks will calculate the loss function over five blocks).  
 Calculating the MSD prospectwise:  
 `sok1.loss('MSD','pw')`  
 The current MSD is ~0.0145.

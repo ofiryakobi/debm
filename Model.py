@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 import multiprocessing as mp
 from functools import partial
+import regex as re
 class Model:
     def __init__(self,parameters, prospects,nsim,FullFeedback=True):
         """
@@ -48,6 +49,14 @@ class Model:
                 return((np.square(self._pred_choices_ - self.get_obs_choices())).mean())
             elif scope.lower() in ["prospectwise","pw","prospect"]:
                 return((np.square(self._pred_choices_.mean(axis=0) - self.get_obs_choices().mean(axis=0))).mean())
+            elif "blocks" in scope.lower():
+                try:
+                    bs=int(re.match('(\d+)blocks',scope.lower())[1])
+                    if self._pred_choices_.shape[0]//bs!=0:
+                        raise Exception("Wrong Number of blocks")
+                    return np.square(np.mean(np.split(self._pred_choices_,bs),axis=1) - np.mean(np.split(self.get_obs_choices(),bs),axis=1)).mean()
+                except:
+                    raise Exception("Blocked MSD calculcation should be in xblocks format, where x is a valid number of blocks")
             else:
                 raise Exception("Provide scope of loss calculation (bitwise, prospectwise")
         elif loss.upper()=="LL":
@@ -155,10 +164,10 @@ class Model:
         minloss=9999
         bestp=None
         if pb:
-            with mp.Pool(mp.cpu_count()) as pool:
+            with mp.Pool(self._mp) as pool:
                 tmpm_array=list(tqdm(pool.imap(partial(_mpoptimizebf_,self,*args,**kwargs),pars_dicts),total=len(pars_dicts)))
         else:
-            with mp.Pool(mp.cpu_count()) as pool:
+            with mp.Pool(self._mp) as pool:
                 tmpm_array=pool.map(partial(_mpoptimizebf_,self,*args,**kwargs),pars_dicts)
             
         minloss=np.min(tmpm_array)
@@ -188,6 +197,5 @@ class Model:
 def _mpoptimizebf_(self,*args,**kwargs): # Helper function for multiprocessing
     p=args[-1]
     args=args[:-1]
-    #raise Exception(self,p,args,kwargs)
     return self.CalcLoss(p,*args,**kwargs)
 

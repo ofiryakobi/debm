@@ -153,13 +153,13 @@ class Sample_of_K(Model):
             return(self._pred_choices_)
 
 
-class SAW(Model):
+class PAS(Model):
     def __init__(self,*args):
         Model.__init__(self,*args)
         self._K=self.parameters['Kappa']
         self._W=self.parameters['Omega']
         self._D=self.parameters['Delta']
-        self.name="SAW"
+        self.name="PAS"
     def Optimize_Simplex(self, parameters,*args,**kwargs):
         """
         Does not change Kappa (int), pass only Omega and Delta

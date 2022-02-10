@@ -52,7 +52,7 @@ class Model:
             elif "blocks" in scope.lower():
                 try:
                     bs=int(re.match('(\d+)blocks',scope.lower())[1])
-                    if self._pred_choices_.shape[0]//bs!=0:
+                    if self._pred_choices_.shape[0]%bs!=0:
                         raise Exception("Wrong Number of blocks")
                     return np.square(np.mean(np.split(self._pred_choices_,bs),axis=1) - np.mean(np.split(self.get_obs_choices(),bs),axis=1)).mean()
                 except:

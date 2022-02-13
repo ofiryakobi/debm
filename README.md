@@ -496,7 +496,7 @@ def dependentOutcomes(prospect):
 #This function accepts an input which we named prospect  
     prospect.Generate() 
     output=prospect.outcomes.copy()
-    output[output!=8]=np.random.randint(-180, 21)
+    output[output!=8]=np.random.randint(-180, 21, len(output[output!=8]))
     return output  
 trials=100 # In case trials is not already defined somewhere else in your code
 A=Prospect(trials,np.random.choice,False,[10,-100],trials,True,[0.9,0.1])
